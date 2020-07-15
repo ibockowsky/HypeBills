@@ -4,11 +4,15 @@ const fb = require('@/services/firebase.js')
 export const namespaced = true
 
 const state = {
-  currentUser: null
+  currentUser: null,
+  currentUserData: null
 }
 const mutations = {
   SET_USER(state, user) {
     state.currentUser = user
+  },
+  SET_USER_DATA(state, user_data) {
+    state.currentUserData = user_data
   },
   CLEAR_USER_DATA(state) {
     state.currentUser = null
@@ -20,6 +24,20 @@ const actions = {
       .createUserWithEmailAndPassword(credentials.email, credentials.password)
       .then(user => {
         commit('SET_USER', user)
+        fb.db
+          .collection('users')
+          .add({
+            name: credentials.username,
+            uid: user.user.uid
+          })
+          .then(docRef => {
+            commit('SET_USER_DATA', {
+              name: docRef.username
+            })
+          })
+          .catch(err => {
+            dispatch('alerts/addError', err, { root: true })
+          })
         router.push('/')
       })
       .catch(err => {
@@ -31,7 +49,25 @@ const actions = {
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then(user => {
         commit('SET_USER', user)
+        dispatch('getUserData', user.user.uid)
         router.push('/')
+      })
+      .catch(err => {
+        dispatch('alerts/addError', err, { root: true })
+      })
+  },
+  getUserData({ commit }, uid) {
+    fb.db
+      .collection('users')
+      .where('uid', '==', uid)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          console.log(doc.data())
+          commit('SET_USER_DATA', {
+            username: doc.data().name
+          })
+        })
       })
       .catch(err => {
         dispatch('alerts/addError', err, { root: true })

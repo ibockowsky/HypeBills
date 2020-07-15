@@ -3,34 +3,23 @@
     <div class="w-full max-w-xs mx-auto">
       <form class="px-8 pt-6 pb-8 mb-4">
         <div class="mb-4">
-          <label class="block text-white text-sm font-bold mb-2" for="username">
-            E-mail
-          </label>
-          <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          <BaseInput
+            label="E-mail"
             v-model="userForm.email"
             type="text"
             placeholder="example@example.com"
           />
         </div>
         <div class="mb-6">
-          <label class="block text-white text-sm font-bold mb-2" for="password">
-            Password
-          </label>
-          <input
-            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          <BaseInput
+            label="Password"
             v-model="userForm.password"
             type="password"
             placeholder="******************"
           />
         </div>
         <div class="flex flex-col items-center justify-center">
-          <button
-            class="transition-all duration-500 ease-in-out text-white font-semibold  py-2 px-8 rounded shadow focus:outline-none transform hover:-translate-y-1 hover:scale-110 bg-gradient-default-blue-pink"
-            @click.prevent="login"
-          >
-            Login!
-          </button>
+          <BaseButton @click.prevent="login">Login!</BaseButton>
           <router-link to="/register" class="text-white text-sm"
             >No account? Register!</router-link
           >
