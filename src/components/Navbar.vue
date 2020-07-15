@@ -9,7 +9,7 @@
         class="w-full relative flex justify-between lg:w-auto  px-4 lg:static lg:block lg:justify-start"
       >
         <router-link
-          class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white"
+          class="text-sm font-bold leading-relaxed inline-block mr-4 py-2 whitespace-no-wrap uppercase text-white focus:outline-none"
           to="/"
         >
           HypeBills
@@ -30,6 +30,7 @@
           <li class="nav-item">
             <router-link
               class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+              v-if="!isLoggedIn"
               to="/login"
             >
               <span class="ml-2">Login</span>
@@ -38,10 +39,20 @@
           <li class="nav-item">
             <router-link
               class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75"
+              v-if="!isLoggedIn"
               to="/register"
             >
               <span class="ml-2">Register</span>
             </router-link>
+          </li>
+          <li class="nav-item">
+            <span
+              class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75 cursor-default"
+              v-if="isLoggedIn"
+              @click="logout"
+            >
+              <span class="ml-2">Logout</span>
+            </span>
           </li>
         </ul>
       </div>
@@ -50,16 +61,21 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 export default {
   name: 'Navbar',
+  computed: { ...mapGetters('user', ['isLoggedIn']) },
   data() {
     return {
       showMenu: false
     }
   },
   methods: {
-    toggleNavbar: function() {
+    toggleNavbar() {
       this.showMenu = !this.showMenu
+    },
+    logout() {
+      this.$store.dispatch('user/logoutUser')
     }
   }
 }

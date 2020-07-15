@@ -63,7 +63,6 @@ const actions = {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          console.log(doc.data())
           commit('SET_USER_DATA', {
             username: doc.data().name
           })
