@@ -12,6 +12,6 @@ export default new Vuex.Store({
 
 fb.auth.onAuthStateChanged(user => {
   if (user) {
-    store.commit('users/SET_USER', user)
+    store.commit('user/SET_USER', user)
   }
 })
