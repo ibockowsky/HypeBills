@@ -6,6 +6,9 @@
     <input
       class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
       :value="value"
+      :class="{
+        'shadow appearance-none border border-red-500 rounded w-full  text-gray-700 leading-tight focus:outline-none focus:shadow-outline': errorClass
+      }"
       @input="updateValue"
       v-bind="$attrs"
       v-on="listeners"
@@ -18,6 +21,11 @@ import { formFieldMixin } from '@/mixins/formFieldMixin'
 export default {
   name: 'BaseInput',
   mixins: [formFieldMixin],
+  props: {
+    errorClass: {
+      type: Boolean
+    }
+  },
   computed: {
     listeners() {
       return {

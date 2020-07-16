@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import Vuelidate from 'vuelidate'
 import App from './App.vue'
 import router from './router'
 import store from './store'
@@ -12,6 +13,7 @@ const fb = require('@/services/firebase.js')
 Vue.config.productionTip = false
 
 Vue.use(VIcon)
+Vue.use(Vuelidate)
 
 const requireComponent = require.context(
   // The relative path of the components folder
