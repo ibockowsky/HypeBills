@@ -31,9 +31,11 @@ const actions = {
             uid: user.user.uid
           })
           .then(docRef => {
-            commit('SET_USER_DATA', {
-              name: docRef.username
-            })
+            let tempObject = {
+              username: docRef.username
+            }
+            commit('SET_USER_DATA', tempObject)
+            localStorage.setItem('userData', JSON.stringify(tempObject))
           })
           .catch(err => {
             dispatch('alerts/addError', err, { root: true })
@@ -57,26 +59,33 @@ const actions = {
       })
   },
   getUserData({ commit }, uid) {
-    fb.db
-      .collection('users')
-      .where('uid', '==', uid)
-      .get()
-      .then(querySnapshot => {
-        querySnapshot.forEach(doc => {
-          commit('SET_USER_DATA', {
-            username: doc.data().name
+    if (localStorage.getItem('userData')) {
+      commit('SET_USER_DATA', JSON.parse(localStorage.getItem('userData')))
+    } else {
+      fb.db
+        .collection('users')
+        .where('uid', '==', uid)
+        .get()
+        .then(querySnapshot => {
+          querySnapshot.forEach(doc => {
+            let tempObject = {
+              username: doc.data().name
+            }
+            commit('SET_USER_DATA', tempObject)
+            localStorage.setItem('userData', JSON.stringify(tempObject))
           })
         })
-      })
-      .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
-      })
+        .catch(err => {
+          dispatch('alerts/addError', err, { root: true })
+        })
+    }
   },
   logoutUser({ commit }) {
     fb.auth
       .signOut()
       .then(() => {
         commit('CLEAR_USER_DATA')
+        localStorage.removeItem('userData')
         router.push('/login')
       })
       .catch(err => {

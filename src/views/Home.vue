@@ -12,6 +12,9 @@
 import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'Home',
+  mounted() {
+    this.$store.dispatch('user/getUserData')
+  },
   computed: {
     ...mapState({
       userData: state => state.user.currentUserData
