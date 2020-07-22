@@ -1,7 +1,7 @@
 <template>
-  <div class="home mx-auto bg-gray-700 w-2/5 shadow-md rounded">
+  <div class="home mx-auto bg-gray-900 w-2/5 shadow-md rounded">
     <div class="w-full max-w-xs mx-auto">
-      <form class="px-8 pt-6 pb-8 mb-4" @keyup.enter="login">
+      <div class="px-8 pt-6 pb-8 mb-4" @keyup.enter="login">
         <BaseInputError v-if="alert.length" :message="alert" />
         <div class="mb-4">
           <BaseInput
@@ -43,7 +43,7 @@
             >No account? Register!</router-link
           >
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </template>

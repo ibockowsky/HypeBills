@@ -13,6 +13,9 @@ const mutations = {
 const actions = {
   addAlert({ commit }, alert) {
     commit(alert)
+  },
+  addError({ commit }, error) {
+    console.log(error)
   }
 }
 

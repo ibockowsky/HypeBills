@@ -1,0 +1,50 @@
+<template>
+  <div>
+    <AddDealModal v-if="addingModal" />
+
+    <div
+      class="mx-auto bg-gray-900 w-4/5 lg:w-3/5 shadow-md rounded p-1 min-h-full"
+    >
+      <div class="flex justify-between px-4 vertical-allign">
+        <span class="text-3xl text-white ">Deals</span>
+        <button
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
+          @click="addDeal"
+        >
+          <icon name="plus-circle" class="w-6 h-6"></icon>
+        </button>
+      </div>
+
+      <TableDeals v-if="deals.length > 0" :tableData="deals" />
+    </div>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex'
+import TableDeals from '@/components/TableDeals.vue'
+import AddDealModal from '@/components/AddDealModal.vue'
+
+export default {
+  name: 'Bills',
+  components: { TableDeals, AddDealModal },
+  computed: {
+    ...mapState('deals', ['deals'])
+  },
+  data() {
+    return {
+      addingModal: false
+    }
+  },
+  created() {
+    this.$store.dispatch('deals/getDeals')
+  },
+  methods: {
+    addDeal() {
+      this.addingModal = !this.addingModal
+    }
+  }
+}
+</script>
+
+<style lang="scss"></style>

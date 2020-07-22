@@ -30,13 +30,6 @@ const actions = {
             name: credentials.username,
             uid: user.user.uid
           })
-          .then(docRef => {
-            let tempObject = {
-              username: docRef.username
-            }
-            commit('SET_USER_DATA', tempObject)
-            localStorage.setItem('userData', JSON.stringify(tempObject))
-          })
           .catch(err => {
             dispatch('alerts/addError', err, { root: true })
           })
@@ -58,7 +51,7 @@ const actions = {
         dispatch('alerts/addError', err, { root: true })
       })
   },
-  getUserData({ commit }, uid) {
+  getUserData({ commit, dispatch }, uid) {
     if (localStorage.getItem('userData')) {
       commit('SET_USER_DATA', JSON.parse(localStorage.getItem('userData')))
     } else {
@@ -80,7 +73,7 @@ const actions = {
         })
     }
   },
-  logoutUser({ commit }) {
+  logoutUser({ commit, dispatch }) {
     fb.auth
       .signOut()
       .then(() => {

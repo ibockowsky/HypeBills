@@ -1,4 +1,5 @@
 module.exports = {
+  purge: false,
   theme: {
     linearGradientDirections: {
       // defaults to these values
