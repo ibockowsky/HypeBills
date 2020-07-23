@@ -1,6 +1,10 @@
 <template>
   <div>
-    <AddDealModal v-if="addingModal" />
+    <AddDealModal
+      v-if="addingModal"
+      @toggle-modal="addingModal = !addingModal"
+      @add-deal="addDeal"
+    />
 
     <div
       class="mx-auto bg-gray-900 w-4/5 lg:w-3/5 shadow-md rounded p-1 min-h-full"
@@ -8,8 +12,8 @@
       <div class="flex justify-between px-4 vertical-allign">
         <span class="text-3xl text-white ">Deals</span>
         <button
-          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full"
-          @click="addDeal"
+          class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
+          @click="addingModal = !addingModal"
         >
           <icon name="plus-circle" class="w-6 h-6"></icon>
         </button>
@@ -40,8 +44,19 @@ export default {
     this.$store.dispatch('deals/getDeals')
   },
   methods: {
-    addDeal() {
-      this.addingModal = !this.addingModal
+    addDeal(items) {
+      const payload = {
+        title: items.title,
+        size: items.size,
+        retail: items.retail,
+        payout: items.payout,
+        currency: items.currency,
+        date: items.date,
+        where: items.where,
+        sold: false
+      }
+      this.$store.dispatch('deals/addDeal', payload)
+      this.addingModal = false
     }
   }
 }

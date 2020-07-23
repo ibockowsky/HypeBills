@@ -47,7 +47,7 @@ export default {
         'payout',
         'currency',
         'date',
-        'shop',
+        'where',
         'sold'
       ]
     }

@@ -8,12 +8,26 @@ const state = {
 const mutations = {
   ADD_DEALS(state, deals) {
     state.deals = deals
+  },
+  ADD_DEAL(state, deal) {
+    state.deals.push(deal)
   }
 }
 
 const actions = {
-  addDeal({ commit, dispatch, rootGetters }) {
-    const uid = rootGetters.user.getUserId()
+  addDeal({ commit, dispatch, rootGetters }, deal) {
+    const uid = rootGetters['user/getUserId']
+    deal = { ...deal, ...{ uid: uid } }
+    fb.db
+      .collection('deals')
+      .add(deal)
+      .then(docRef => {
+        deal = { ...deal, ...{ id: docRef.id } }
+        commit('ADD_DEAL', deal)
+      })
+      .catch(err => {
+        dispatch('alerts/addError', err, { root: true })
+      })
   },
   getDeals({ commit, dispatch, rootGetters }) {
     let tempArray = []
@@ -32,7 +46,7 @@ const actions = {
             payout: doc.data().payout,
             currency: doc.data().currency,
             date: doc.data().date.toDate(),
-            shop: doc.data().shop,
+            where: doc.data().where,
             sold: doc.data().sold
           }
           tempArray.push(tempObject)
