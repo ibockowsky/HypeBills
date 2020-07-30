@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed bottom-0 inset-x-0 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
+    class="fixed bottom-0 inset-x-0 z-10 px-4 pb-4 sm:inset-0 sm:flex sm:items-center sm:justify-center"
   >
     <div class="fixed inset-0 transition-opacity">
       <div
@@ -17,7 +17,7 @@
     >
       <div class="bg-gray-900 px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
         <div class="sm:flex sm:items-start">
-          <div class="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
+          <div class="mt-3 text-center sm:mt-0 sm:text-left">
             <div class="relative h-16 border-b border-gray-800">
               <span class="absolute bottom-0 text-xl text-white">
                 Add deal

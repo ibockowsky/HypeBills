@@ -13,11 +13,14 @@ const fb = require('@/services/firebase.js')
 
 Vue.config.productionTip = false
 
-Vue.use(VIcon)
-Vue.use(Vuelidate)
+//Plugins
 Vue.use(VCalendar, {
   componentPrefix: 'vc'
 })
+Vue.use(VIcon)
+Vue.use(Vuelidate)
+
+//Globa
 const requireComponent = require.context(
   './components/Base',
   false,

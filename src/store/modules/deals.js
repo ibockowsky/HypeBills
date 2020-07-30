@@ -11,6 +11,7 @@ const mutations = {
   },
   ADD_DEAL(state, deal) {
     state.deals.push(deal)
+    state.deals.sort((a, b) => b.date - a.date)
   }
 }
 
@@ -35,6 +36,7 @@ const actions = {
     fb.db
       .collection('deals')
       .where('uid', '==', uid)
+      .orderBy('date', 'desc')
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {

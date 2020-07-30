@@ -15,7 +15,7 @@ const actions = {
     commit(alert)
   },
   addError({ commit }, error) {
-    // console.log(error)
+    console.log(error)
   }
 }
 

@@ -5,7 +5,6 @@
       @toggle-modal="addingModal = !addingModal"
       @add-deal="addDeal"
     />
-
     <div
       class="mx-auto bg-gray-900 w-4/5 lg:w-3/5 shadow-md rounded p-1 min-h-full"
     >
@@ -19,7 +18,8 @@
         </button>
       </div>
 
-      <TableDeals v-if="deals.length > 0" :tableData="deals" />
+      <TableDeals v-if="pageOfDeals.length > 0" :tableData="pageOfDeals" />
+      <BasePagination :items="deals" @changePage="onChangePage" />
     </div>
   </div>
 </template>
@@ -37,7 +37,8 @@ export default {
   },
   data() {
     return {
-      addingModal: false
+      addingModal: false,
+      pageOfDeals: []
     }
   },
   created() {
@@ -57,6 +58,9 @@ export default {
       }
       this.$store.dispatch('deals/addDeal', payload)
       this.addingModal = false
+    },
+    onChangePage(pageOfDeals) {
+      this.pageOfDeals = pageOfDeals
     }
   }
 }
