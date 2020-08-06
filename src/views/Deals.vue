@@ -6,7 +6,7 @@
       @add-deal="addDeal"
     />
     <div
-      class="mx-auto bg-gray-900 w-4/5 lg:w-3/5 shadow-md rounded p-1 min-h-full"
+      class="mx-auto bg-gray-900 w-11/12 lg:w-3/4 shadow-md rounded p-1 min-h-full"
     >
       <div class="flex justify-between px-4 vertical-allign">
         <span class="text-3xl text-white ">Deals</span>
@@ -30,7 +30,7 @@ import TableDeals from '@/components/TableDeals.vue'
 import AddDealModal from '@/components/AddDealModal.vue'
 
 export default {
-  name: 'Bills',
+  name: 'Deals',
   components: { TableDeals, AddDealModal },
   computed: {
     ...mapState('deals', ['deals'])
@@ -54,7 +54,7 @@ export default {
         currency: items.currency,
         date: items.date,
         where: items.where,
-        sold: false
+        status: items.status
       }
       this.$store.dispatch('deals/addDeal', payload)
       this.addingModal = false

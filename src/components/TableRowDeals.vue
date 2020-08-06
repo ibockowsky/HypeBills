@@ -5,20 +5,26 @@
       v-for="(col, $key, $index) in tableCol"
       :key="$index"
     >
-      <template v-if="$key === 'sold'">
-        <span
-          class="relative inline-block px-3 py-1 font-semibold capitalize leading-tight"
+      <template v-if="$key === 'status'">
+        <!-- <span
+          class="relative inline-block px-3 py-1 font-semibold capitalize leading-tight select-none"
           :class="{
-            'text-green-900': col === true,
-            'text-red-900': col === false
+            'text-green-900': col === 'sold',
+            'text-red-900': col === 'in hold',
+            'text-gray-900': col === 'unknown' || col === 'in transit'
           }"
+        > -->
+        <span
+          class="relative inline-block px-3 py-1 text-gray-900 font-semibold capitalize leading-tight select-none"
         >
           <span
             aria-hidden
             class="absolute inset-0 rounded-full opacity-75"
             :class="{
-              'bg-green-400': col === true,
-              'bg-red-500': col === false
+              'bg-green-400': col === 'sold',
+              'bg-red-500': col === 'in hold',
+              'bg-gray-600': col === 'unknown',
+              'bg-yellow-500': col === 'in transit'
             }"
           ></span>
           <span class="relative">{{ col }}</span>
@@ -31,7 +37,7 @@
 
 <script>
 export default {
-  name: 'TableRow',
+  name: 'TableRowDeals',
   props: {
     rowData: {
       type: Object,
@@ -48,7 +54,7 @@ export default {
         currency: this.rowData.currency,
         date: this.rowData.date.toLocaleDateString(),
         where: this.rowData.where,
-        sold: this.rowData.sold
+        status: this.rowData.status
       }
     }
   }

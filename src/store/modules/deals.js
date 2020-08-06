@@ -49,7 +49,7 @@ const actions = {
             currency: doc.data().currency,
             date: doc.data().date.toDate(),
             where: doc.data().where,
-            sold: doc.data().sold
+            status: doc.data().status
           }
           tempArray.push(tempObject)
         })

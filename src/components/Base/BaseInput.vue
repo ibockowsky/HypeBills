@@ -21,11 +21,6 @@ import { formFieldMixin } from '@/mixins/formFieldMixin'
 export default {
   name: 'BaseInput',
   mixins: [formFieldMixin],
-  props: {
-    errorClass: {
-      type: Boolean
-    }
-  },
   computed: {
     listeners() {
       return {

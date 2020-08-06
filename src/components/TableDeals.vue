@@ -48,7 +48,7 @@ export default {
         'currency',
         'date',
         'where',
-        'sold'
+        'status'
       ]
     }
   }

@@ -59,6 +59,7 @@
 <script>
 import paginate from 'jw-paginate'
 export default {
+  name: 'BasePagination',
   props: {
     items: {
       type: Array,
@@ -70,7 +71,7 @@ export default {
     },
     pageSize: {
       type: Number,
-      default: 10
+      default: 15
     },
     maxPages: {
       type: Number,
@@ -94,7 +95,6 @@ export default {
   },
   watch: {
     items() {
-      console.log(this.pager.currentPage)
       this.setPage(this.pager.currentPage)
     }
   },

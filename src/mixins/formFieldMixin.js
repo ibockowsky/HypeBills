@@ -5,6 +5,9 @@ export const formFieldMixin = {
       type: String,
       default: ''
     },
+    errorClass: {
+      type: Boolean
+    },
     value: [String, Number]
   },
   methods: {

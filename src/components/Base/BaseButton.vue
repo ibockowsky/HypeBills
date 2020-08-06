@@ -12,6 +12,7 @@
 
 <script>
 export default {
+  name: 'BaseButton',
   inheritAttrs: false,
   props: {
     buttonClass: {
