@@ -12,6 +12,16 @@ const mutations = {
   ADD_DEAL(state, deal) {
     state.deals.push(deal)
     state.deals.sort((a, b) => b.date - a.date)
+  },
+  REMOVE_DEAL(state, id) {
+    const index = state.deals.findIndex(item => item.id == id)
+    if (index >= 0) {
+      state.deals.splice(index, 1)
+    }
+  },
+  UPDATE_DEAL(state, deal) {
+    const index = state.deals.findIndex(item => item.id == deal[0])
+    state.deals.splice(index, 1, deal[1])
   }
 }
 
@@ -58,12 +68,37 @@ const actions = {
       .catch(err => {
         dispatch('alerts/addError', err, { root: true })
       })
+  },
+  removeDeal({ commit, dispatch }, id) {
+    fb.db
+      .collection('deals')
+      .doc(id)
+      .delete()
+      .then(() => {
+        commit('REMOVE_DEAL', id)
+      })
+      .catch(err => {
+        dispatch('alerts/addError', err, { root: true })
+      })
+  },
+  editDeal({ commit, dispatch }, deal) {
+    console.log(deal)
+    fb.db
+      .collection('deals')
+      .doc(deal[0])
+      .set(deal[1], { merge: true })
+      .then(() => {
+        commit('UPDATE_DEAL', deal)
+      })
+      .catch(err => {
+        dispatch('alerts/addError', err, { root: true })
+      })
   }
 }
 
 const getters = {
-  getterValue: state => {
-    return state.value
+  getDeal: state => id => {
+    return state.deals.filter(item => item.id === id)[0]
   }
 }
 

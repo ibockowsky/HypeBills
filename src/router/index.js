@@ -7,7 +7,7 @@ import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
 
 import Deals from '@/views/Deals.vue'
-
+import EditDealModal from '@/components/EditDealModal.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -36,7 +36,17 @@ const routes = [
     path: '/deals',
     name: 'Deals',
     component: Deals,
-    meta: { requiresAuth: true }
+    meta: { requiresAuth: true },
+    children: [
+      {
+        path: ':dealID',
+        component: EditDealModal,
+        props: true,
+        meta: {
+          showModal: true
+        }
+      }
+    ]
   }
 ]
 

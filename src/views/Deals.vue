@@ -5,6 +5,7 @@
       @toggle-modal="addingModal = !addingModal"
       @add-deal="addDeal"
     />
+    <router-view />
     <div
       class="mx-auto bg-gray-900 w-11/12 lg:w-3/4 shadow-md rounded p-1 min-h-full"
     >

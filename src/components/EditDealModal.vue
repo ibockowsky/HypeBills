@@ -5,7 +5,7 @@
     <div
       class="fixed w-full h-100 inset-0 overflow-hidden animated fadeIn faster"
       style="background: rgba(0,0,0,.8);"
-      @click.prevent="toggleAddModal"
+      @click.prevent="toggleEditModal"
     ></div>
     <div
       class="flex items-center justify-center border border-gray-800 shadow-lg modal-container bg-gray-900 sm:w-10/12 xl:w-1/3 mx-auto rounded z-50"
@@ -118,19 +118,19 @@
           <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
             <button
               type="button"
-              class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+              class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-yellow-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-yellow-600 focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
               :disabled="$v.dealForm.$anyError"
-              @click="addDeal(dealForm)"
+              @click="editDeal(dealForm)"
             >
-              Add
+              Edit
             </button>
           </span>
           <span class="flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
             <button
               type="button"
               class="inline-flex justify-center w-full rounded-md border border-gray-800 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-base leading-6 font-medium text-white shadow-sm  focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
-              @click="toggleAddModal"
+              @click="toggleEditModal"
             >
               Cancel
             </button>
@@ -143,9 +143,24 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: 'AddDealModal',
+  name: 'EditDealModal',
+  props: {
+    dealID: {
+      type: String,
+      required
+    }
+  },
+  computed: {
+    ...mapGetters({
+      getDeal: 'deals/getDeal'
+    }),
+    deal() {
+      return this.getDeal(this.dealID)
+    }
+  },
   data() {
     return {
       dealForm: {
@@ -162,6 +177,16 @@ export default {
       currency_options: ['PLN', 'EUR', 'USD', 'GBP']
     }
   },
+  mounted() {
+    this.dealForm.title = this.deal.title
+    this.dealForm.size = this.deal.size
+    this.dealForm.retail = this.deal.retail
+    this.dealForm.payout = this.deal.payout
+    this.dealForm.currency = this.deal.currency
+    this.dealForm.date = this.deal.date
+    this.dealForm.where = this.deal.where
+    this.dealForm.status = this.deal.status
+  },
   validations: {
     dealForm: {
       title: { required },
@@ -174,15 +199,18 @@ export default {
     }
   },
   methods: {
-    toggleAddModal() {
-      this.$emit('toggle-modal')
+    toggleEditModal() {
+      this.$router.go(-1)
     },
-    addDeal(deal) {
+    editDeal(deal) {
       this.$v.$touch()
       if (this.$v.$invalid) {
         return
       } else {
-        this.$emit('add-deal', deal)
+        deal.id = this.dealID
+        this.$store.dispatch('deals/editDeal', [this.dealID, deal]).then(() => {
+          this.$router.go(-1)
+        })
       }
     }
   }

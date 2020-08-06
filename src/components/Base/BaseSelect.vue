@@ -60,6 +60,7 @@ export default {
       type: String,
       default: ''
     },
+    value: { type: String },
     errorClass: {
       type: Boolean
     },
@@ -73,9 +74,16 @@ export default {
       default: 0
     }
   },
+  watch: {
+    value() {
+      this.selected = this.options[this.options.indexOf(this.value)]
+    }
+  },
   data() {
     return {
-      selected: this.options.length > 0 ? this.options[0] : null,
+      selected: this.value
+        ? this.options[this.options.indexOf(this.value)]
+        : this.options[0],
       open: false
     }
   },

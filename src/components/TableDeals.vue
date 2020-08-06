@@ -18,6 +18,8 @@
             v-for="data in tableData"
             :key="data.id"
             :rowData="data"
+            @remove-deal="removeDeal(data.id)"
+            @edit-deal="editDeal(data.id)"
           />
         </tbody>
       </table>
@@ -48,8 +50,17 @@ export default {
         'currency',
         'date',
         'where',
-        'status'
+        'status',
+        'options'
       ]
+    }
+  },
+  methods: {
+    removeDeal(id) {
+      this.$store.dispatch('deals/removeDeal', id)
+    },
+    editDeal(id) {
+      this.$router.push(`deals/${id}`)
     }
   }
 }
