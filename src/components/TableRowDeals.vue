@@ -30,6 +30,11 @@
           <span class="relative">{{ col }}</span>
         </span>
       </template>
+      <template v-else-if="$key === 'retail' || $key === 'payout'">
+        <span class="text-gray-200 whitespace-no-wrap"
+          >{{ col }} {{ currencySign(tableCol.currency) }}</span
+        >
+      </template>
       <span v-else class="text-gray-200 whitespace-no-wrap">{{ col }}</span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -52,8 +57,11 @@
 </template>
 
 <script>
+import { currencySign } from '@/mixins/currencySign.js'
+
 export default {
   name: 'TableRowDeals',
+  mixins: [currencySign],
   props: {
     rowData: {
       type: Object,
