@@ -82,7 +82,6 @@ const actions = {
       })
   },
   editDeal({ commit, dispatch }, deal) {
-    console.log(deal)
     fb.db
       .collection('deals')
       .doc(deal[0])
