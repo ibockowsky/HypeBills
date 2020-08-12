@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import { formFieldMixin } from '@/mixins/formFieldMixin'
 export default {
   name: 'BaseSelect',
   props: {
@@ -93,28 +92,4 @@ export default {
 }
 </script>
 
-<style scoped>
-/* .items {
-  color: #ffffff;
-  border-radius: 0px 0px 6px 6px;
-  overflow: hidden;
-  border-right: 1px solid #ce9b2c;
-  border-left: 1px solid #ce9b2c;
-  border-bottom: 1px solid #ce9b2c;
-  position: absolute;
-  background-color: #080d0e;
-  left: 0;
-  right: 0;
-}
-
-.item {
-  color: #ffffff;
-  padding-left: 8px;
-  cursor: pointer;
-  user-select: none;
-}
-
-.item:hover {
-  background-color: #b68a28;
-} */
-</style>
+<style scoped></style>

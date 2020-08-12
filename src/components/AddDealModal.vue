@@ -11,10 +11,15 @@
       class="flex items-center justify-center md:border border-gray-800 shadow-lg bg-gray-900 w-full md:w-3/4 xl:w-2/5 sm:mx-auto rounded z-50"
     >
       <div
-        class="py-4 text-left px-2 overflow-y-auto overflow-x-hidden max-h-screen sm:h-auto"
+        class="py-4 text-leftx px-2 overflow-y-auto overflow-x-hidden max-h-screen sm:h-auto"
       >
         <div class="flex justify-between items-center pb-3">
           <p class="text-2xl text-white font-bold">Add deal</p>
+          <span
+            class="text-gray-700 hover:text-gray-600"
+            @click.prevent="toggleAddModal"
+            ><icon name="x" class="w-6 h-6"
+          /></span>
         </div>
         <div class="mt-2">
           <form class="w-full max-w-lg">

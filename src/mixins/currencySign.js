@@ -18,7 +18,6 @@ export const currencySign = {
         UAH: '₴', // Ukrainian Hryvnia
         VND: '₫' // Vietnamese Dong
       }
-      console.log(currency_name)
       if (currency_symbols[currency_name] !== undefined) {
         return currency_symbols[currency_name]
       }

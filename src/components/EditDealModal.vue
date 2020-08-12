@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed w-full bottom-0 z-20 px-4 pb-4 inset-0 flex items-center justify-center"
+    class="fixed w-full bottom-0 z-20 md:px-4 md:pb-4 inset-0 flex items-center justify-center"
   >
     <div
       class="fixed w-full h-100 inset-0 overflow-hidden animated fadeIn faster"
@@ -8,13 +8,18 @@
       @click.prevent="toggleEditModal"
     ></div>
     <div
-      class="flex items-center justify-center border border-gray-800 shadow-lg modal-container bg-gray-900 sm:w-10/12 xl:w-1/3 mx-auto rounded z-50"
+      class="flex items-center justify-center md:border border-gray-800 shadow-lg bg-gray-900 w-full md:w-3/4 xl:w-2/5 sm:mx-auto rounded z-50"
     >
       <div
         class="py-4 text-left px-2 overflow-y-auto overflow-x-hidden max-h-screen sm:h-auto"
       >
         <div class="flex justify-between items-center pb-3">
           <p class="text-2xl text-white font-bold">Add deal</p>
+          <span
+            class="text-gray-700 hover:text-gray-600"
+            @click.prevent="toggleEditModal"
+            ><icon name="x" class="w-6 h-6"
+          /></span>
         </div>
         <div class="mt-2">
           <form class="w-full max-w-lg">

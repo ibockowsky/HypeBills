@@ -32,10 +32,16 @@
       </template>
       <template v-else-if="$key === 'retail' || $key === 'payout'">
         <span class="text-gray-200 whitespace-no-wrap"
-          >{{ col }} {{ currencySign(tableCol.currency) }}</span
+          >{{ col ? col : '0' }} {{ currencySign(tableCol.currency) }}</span
         >
       </template>
-      <span v-else class="text-gray-200 whitespace-no-wrap">{{ col }}</span>
+      <span
+        v-else
+        class="text-gray-200 whitespace-no-wrap"
+        :class="{ 'text-gray-800': !col }"
+      >
+        {{ col ? col : 'undefined' }}
+      </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
       <div class="flex space-x-1">

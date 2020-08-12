@@ -43,7 +43,7 @@ const routes = [
         component: EditDealModal,
         props: true,
         meta: {
-          showModal: true
+          disabledOutside: true
         }
       }
     ]
@@ -58,10 +58,17 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   const requiresAuth = to.matched.some(x => x.meta.requiresAuth)
   const disabledForLogged = to.matched.some(x => x.meta.disabledForLogged)
+  const disabledOutside = to.matched.some(x => x.meta.disabledOutside)
   const currentUser = firebase.auth().currentUser
 
   if (requiresAuth && !currentUser) {
     next('/login')
+  } else if (disabledOutside) {
+    if (from.name === null) {
+      next('/')
+    } else {
+      next()
+    }
   } else if (requiresAuth && currentUser) {
     next()
   } else if (disabledForLogged && currentUser) {
