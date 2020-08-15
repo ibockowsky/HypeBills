@@ -24,6 +24,11 @@ const actions = {
       .createUserWithEmailAndPassword(credentials.email, credentials.password)
       .then(user => {
         commit('SET_USER', user)
+        dispatch(
+          'alerts/addAlert',
+          { content: 'Registered!', type: 'success' },
+          { root: true }
+        )
         fb.db
           .collection('users')
           .add({
@@ -31,12 +36,20 @@ const actions = {
             uid: user.user.uid
           })
           .catch(err => {
-            dispatch('alerts/addError', err, { root: true })
+            dispatch(
+              'alerts/addAlert',
+              { title: 'Error', content: err.message, type: 'error' },
+              { root: true }
+            )
           })
         router.push('/')
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   },
   loginUser({ commit, dispatch }, credentials) {
@@ -45,6 +58,11 @@ const actions = {
       .then(user => {
         commit('SET_USER', user)
         dispatch('getUserData', user.user.uid)
+        dispatch(
+          'alerts/addAlert',
+          { content: 'Logged in!', type: 'success' },
+          { root: true }
+        )
         router.push('/')
       })
       .catch(err => {
@@ -73,7 +91,11 @@ const actions = {
           })
         })
         .catch(err => {
-          dispatch('alerts/addError', err, { root: true })
+          dispatch(
+            'alerts/addAlert',
+            { title: 'Error', content: err.message, type: 'error' },
+            { root: true }
+          )
         })
     }
   },
@@ -82,21 +104,26 @@ const actions = {
       .signOut()
       .then(() => {
         commit('CLEAR_USER_DATA')
+        dispatch(
+          'alerts/addAlert',
+          { content: 'Logged out!', type: 'success' },
+          { root: true }
+        )
         localStorage.removeItem('userData')
         router.push('/login')
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   }
 }
 const getters = {
-  getUserId(state) {
-    return state.currentUser.uid
-  },
-  isLoggedIn(state) {
-    return !!state.currentUser
-  }
+  getUserId: state => state.currentUser.uid,
+  isLoggedIn: state => !!state.currentUser
 }
 
 export { state, mutations, actions, getters }

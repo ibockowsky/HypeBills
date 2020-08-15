@@ -35,9 +35,18 @@ const actions = {
       .then(docRef => {
         deal = { ...deal, ...{ id: docRef.id } }
         commit('ADD_DEAL', deal)
+        dispatch(
+          'alerts/addAlert',
+          { content: 'Added!', type: 'success' },
+          { root: true }
+        )
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   },
   getDeals({ commit, dispatch, rootGetters }) {
@@ -76,9 +85,18 @@ const actions = {
       .delete()
       .then(() => {
         commit('REMOVE_DEAL', id)
+        dispatch(
+          'alerts/addAlert',
+          { content: 'Removed!', type: 'success' },
+          { root: true }
+        )
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   },
   editDeal({ commit, dispatch }, deal) {
@@ -88,17 +106,24 @@ const actions = {
       .set(deal[1], { merge: true })
       .then(() => {
         commit('UPDATE_DEAL', deal)
+        dispatch(
+          'alerts/addAlert',
+          { content: 'Edited!', type: 'success' },
+          { root: true }
+        )
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   }
 }
 
 const getters = {
-  getDeal: state => id => {
-    return state.deals.filter(item => item.id === id)[0]
-  }
+  getDeal: state => id => state.deals.filter(item => item.id === id)[0]
 }
 
 export { state, mutations, actions, getters }
