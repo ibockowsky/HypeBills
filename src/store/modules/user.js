@@ -48,7 +48,11 @@ const actions = {
         router.push('/')
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   },
   getUserData({ commit, dispatch }, uid) {

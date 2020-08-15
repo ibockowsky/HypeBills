@@ -1,3 +1,5 @@
+import { uuid } from 'vue-uuid'
+
 export const namespaced = true
 
 const state = {
@@ -7,16 +9,23 @@ const state = {
 const mutations = {
   ADD_ALERT(state, alert) {
     state.alerts.push(alert)
+  },
+  REMOVE_ALERT(state, alert) {
+    state.alerts.splice(state.alerts.indexOf(alert), 1)
   }
 }
 
 const actions = {
   addAlert({ commit }, alert) {
-    commit(alert)
+    alert.id = uuid.v4()
+    commit('ADD_ALERT', alert)
   },
-  addError({ commit }, error) {
-    // console.log(error)
+  removeAlert({ commit }, alert) {
+    commit('REMOVE_ALERT', alert)
   }
 }
 
-export { state, mutations, actions }
+const getters = {
+  getAlerts: state => state.alerts
+}
+export { state, mutations, actions, getters }
