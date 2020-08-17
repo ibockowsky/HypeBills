@@ -7,6 +7,7 @@ import VIcon from 'vue-tailwind-icons'
 import VCalendar from 'v-calendar'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import VueConfirmDialog from '@/Plugins/VueConfirmDialog'
 import '@/assets/css/tailwind.css'
 import '@/assets/css/style.scss'
 const fb = require('@/services/firebase.js')
@@ -19,6 +20,8 @@ Vue.use(VCalendar, {
 })
 Vue.use(VIcon)
 Vue.use(Vuelidate)
+Vue.use(VueConfirmDialog)
+Vue.component('vue-confirm-dialog', VueConfirmDialog.default)
 
 //Globa
 const requireComponent = require.context(

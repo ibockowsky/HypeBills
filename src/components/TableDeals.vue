@@ -43,6 +43,7 @@ export default {
   data() {
     return {
       tableFields: [
+        '',
         'title',
         'size',
         'retail',
@@ -57,10 +58,24 @@ export default {
   },
   methods: {
     removeDeal(id) {
-      this.$store.dispatch('deals/removeDeal', id)
+      this.$confirm({
+        message: 'Are you sure?',
+        button: {
+          no: 'No',
+          yes: 'Yes'
+        },
+        callback: confirm => {
+          if (confirm) {
+            this.$store.dispatch('deals/removeDeal', id)
+          }
+        }
+      })
     },
     editDeal(id) {
       this.$router.push(`deals/${id}`)
+    },
+    selectDeal(e) {
+      console.log(e)
     }
   }
 }

@@ -20,9 +20,11 @@
     "tailwindcss-gradients": "^3.0.0",
     "v-calendar": "^1.0.8",
     "vue": "^2.6.11",
+    "vue-confirm-dialog": "^1.0.2",
     "vue-router": "^3.4.3",
     "vue-tailwind-icons": "0.0.3",
     "vue-uuid": "^2.0.2",
+    "vuejs-dialog": "^1.4.1",
     "vuelidate": "^0.7.5",
     "vuetable-2": "^2.0.0-beta.4",
     "vuex": "^3.4.0"

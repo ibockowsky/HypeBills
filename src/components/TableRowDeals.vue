@@ -1,5 +1,8 @@
 <template>
   <tr>
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+      <input type="checkbox" @change="$emit('selected-deal')" />
+    </td>
     <td
       class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm"
       v-for="(col, $key, $index) in tableCol"
