@@ -1,6 +1,6 @@
 <template>
   <div
-    class="relative w-auto bg-gray-700 text-gray-400 rounded h-auto mx-2 my-2 py-1 pl-1 pr-6 shadow border-l-4"
+    class="relative w-full md:w-auto bg-gray-700 text-gray-400 rounded h-auto mx-2 my-2 py-1 pl-1 pr-6 shadow border-l-4"
     :class="{
       'border-red-600': type === 'error',
       'border-green-600': type === 'success'

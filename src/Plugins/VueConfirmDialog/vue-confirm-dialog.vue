@@ -192,7 +192,7 @@ export default Component
   margin-bottom: 5px;
 }
 .vc-text {
-  color: var(--message-color);
+  @apply text-gray-400;
   padding: 0 1rem;
   width: 100%;
   font-weight: var(--font-weight-medium);
@@ -215,13 +215,13 @@ export default Component
   align-content: baseline;
 }
 .vc-container {
-  background-color: var(--base-background-color);
+  @apply bg-gray-800;
   border-radius: 1rem;
   width: 286px;
   height: auto;
   display: grid;
   grid-template-rows: 1fr max-content;
-  box-shadow: var(--container-box-shadow);
+  @apply shadow-md;
 }
 .vc-text-grid {
   padding: 1rem;
@@ -239,17 +239,18 @@ export default Component
 .vc-btn {
   border-radius: 0 0 1rem 0;
   color: var(--button-color);
-  background-color: var(--button-background-color);
+  @apply bg-gray-800;
   border: 0;
   font-size: 1rem;
-  border-top: 1px solid var(--button-border-color);
+  border-top: 1px solid;
+  @apply border-gray-700;
   cursor: pointer;
   font-weight: var(--font-weight-bold);
   outline: none;
   min-height: 50px;
 }
 .vc-btn:hover {
-  background-color: var(--button-background-color-hover);
+  @apply bg-gray-700;
 }
 .vc-btn:disabled {
   background-color: var(--button-background-color-disabled);
@@ -259,7 +260,8 @@ export default Component
 }
 .vc-btn.left {
   border-radius: 0;
-  border-right: 1px solid var(--button-border-color);
+  border-right: 1px solid;
+  @apply border-gray-700;
 }
 .vc-input[type='password'] {
   width: 100%;
