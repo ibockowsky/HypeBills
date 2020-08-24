@@ -151,22 +151,20 @@ import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddDealModal',
-  data() {
-    return {
-      dealForm: {
-        title: '',
-        size: '',
-        retail: '',
-        payout: '',
-        currency: '',
-        date: new Date(),
-        where: '',
-        status: ''
-      },
-      status_options: ['unknown', 'on hold', 'sold', 'in transit'],
-      currency_options: ['PLN', 'EUR', 'USD', 'GBP']
-    }
-  },
+  data: () => ({
+    dealForm: {
+      title: '',
+      size: '',
+      retail: '',
+      payout: '',
+      currency: '',
+      date: new Date(),
+      where: '',
+      status: ''
+    },
+    status_options: ['unknown', 'on hold', 'sold', 'in transit'],
+    currency_options: ['PLN', 'EUR', 'USD', 'GBP']
+  }),
   validations: {
     dealForm: {
       title: { required },

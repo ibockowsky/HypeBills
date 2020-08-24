@@ -70,11 +70,9 @@ import { mapGetters } from 'vuex'
 export default {
   name: 'Navbar',
   computed: { ...mapGetters('user', ['isLoggedIn']) },
-  data() {
-    return {
-      showMenu: false
-    }
-  },
+  data: () => ({
+    showMenu: false
+  }),
   methods: {
     toggleNavbar() {
       this.showMenu = !this.showMenu

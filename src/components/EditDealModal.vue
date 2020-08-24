@@ -126,7 +126,7 @@
               class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-yellow-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-yellow-600 focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
               :disabled="$v.dealForm.$anyError"
-              @click="editDeal(dealForm)"
+              @click="editDeal"
             >
               Edit
             </button>
@@ -148,7 +148,7 @@
 
 <script>
 import { required } from 'vuelidate/lib/validators'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
   name: 'EditDealModal',
@@ -166,22 +166,20 @@ export default {
       return this.getDeal(this.dealID)
     }
   },
-  data() {
-    return {
-      dealForm: {
-        title: '',
-        size: '',
-        retail: '',
-        payout: '',
-        currency: '',
-        date: new Date(),
-        where: '',
-        status: ''
-      },
-      status_options: ['unknown', 'on hold', 'sold', 'in transit'],
-      currency_options: ['PLN', 'EUR', 'USD', 'GBP']
-    }
-  },
+  data: () => ({
+    dealForm: {
+      title: '',
+      size: '',
+      retail: '',
+      payout: '',
+      currency: '',
+      date: new Date(),
+      where: '',
+      status: ''
+    },
+    status_options: ['unknown', 'on hold', 'sold', 'in transit'],
+    currency_options: ['PLN', 'EUR', 'USD', 'GBP']
+  }),
   mounted() {
     this.dealForm.title = this.deal.title
     this.dealForm.size = this.deal.size
@@ -204,16 +202,23 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      EDIT_DEAL: 'deals/editDeal'
+    }),
     toggleEditModal() {
       this.$router.go(-1)
     },
-    editDeal(deal) {
+    editDeal() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         return
       } else {
-        deal.id = this.dealID
-        this.$store.dispatch('deals/editDeal', [this.dealID, deal]).then(() => {
+        // this.$store
+        //   .dispatch('deals/editDeal', { ...this.dealForm, id: this.dealID })
+        //   .then(() => {
+        //     this.$router.go(-1)
+        //   })
+        this.EDIT_DEAL({ ...this.dealForm, id: this.dealID }).then(() => {
           this.$router.go(-1)
         })
       }

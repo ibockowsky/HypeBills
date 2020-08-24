@@ -6,27 +6,25 @@ const state = {
 }
 
 const mutations = {
-  ADD_DEALS(state, deals) {
-    state.deals = deals
-  },
-  ADD_DEAL(state, deal) {
+  ADD_DEALS: (state, deals) => (state.deals = deals),
+  ADD_DEAL: (state, deal) => {
     state.deals.push(deal)
     state.deals.sort((a, b) => b.date - a.date)
   },
-  REMOVE_DEAL(state, id) {
+  REMOVE_DEAL: (state, id) => {
     const index = state.deals.findIndex(item => item.id == id)
     if (index >= 0) {
       state.deals.splice(index, 1)
     }
   },
-  UPDATE_DEAL(state, deal) {
-    const index = state.deals.findIndex(item => item.id == deal[0])
-    state.deals.splice(index, 1, deal[1])
+  UPDATE_DEAL: (state, deal) => {
+    const index = state.deals.findIndex(item => item.id == deal.id)
+    state.deals.splice(index, 1, deal)
   }
 }
 
 const actions = {
-  addDeal({ commit, dispatch, rootGetters }, deal) {
+  addDeal: ({ commit, dispatch, rootGetters }, deal) => {
     const uid = rootGetters['user/getUserId']
     deal = { ...deal, ...{ uid: uid } }
     fb.db
@@ -49,7 +47,7 @@ const actions = {
         )
       })
   },
-  getDeals({ commit, dispatch, rootGetters }) {
+  getDeals: ({ commit, dispatch, rootGetters }) => {
     let tempArray = []
     const uid = rootGetters['user/getUserId']
     fb.db
@@ -78,7 +76,7 @@ const actions = {
         dispatch('alerts/addError', err, { root: true })
       })
   },
-  removeDeal({ commit, dispatch }, id) {
+  removeDeal: ({ commit, dispatch }, id) => {
     fb.db
       .collection('deals')
       .doc(id)
@@ -99,11 +97,11 @@ const actions = {
         )
       })
   },
-  editDeal({ commit, dispatch }, deal) {
+  editDeal: ({ commit, dispatch }, deal) => {
     fb.db
       .collection('deals')
-      .doc(deal[0])
-      .set(deal[1], { merge: true })
+      .doc(deal.id)
+      .set(deal, { merge: true })
       .then(() => {
         commit('UPDATE_DEAL', deal)
         dispatch(

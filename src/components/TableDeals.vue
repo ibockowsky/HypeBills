@@ -40,22 +40,20 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      tableFields: [
-        '',
-        'title',
-        'size',
-        'retail',
-        'payout',
-        'currency',
-        'date',
-        'where',
-        'status',
-        'options'
-      ]
-    }
-  },
+  data: () => ({
+    tableFields: [
+      '',
+      'title',
+      'size',
+      'retail',
+      'payout',
+      'currency',
+      'date',
+      'where',
+      'status',
+      'options'
+    ]
+  }),
   methods: {
     removeDeal(id) {
       this.$confirm({

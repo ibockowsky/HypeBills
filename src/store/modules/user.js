@@ -8,18 +8,12 @@ const state = {
   currentUserData: null
 }
 const mutations = {
-  SET_USER(state, user) {
-    state.currentUser = user
-  },
-  SET_USER_DATA(state, user_data) {
-    state.currentUserData = user_data
-  },
-  CLEAR_USER_DATA(state) {
-    state.currentUser = null
-  }
+  SET_USER: (state, user) => (state.currentUser = user),
+  SET_USER_DATA: (state, user_data) => (state.currentUserData = user_data),
+  CLEAR_USER_DATA: state => (state.currentUser = null)
 }
 const actions = {
-  registerUser({ commit, dispatch }, credentials) {
+  registerUser: ({ commit, dispatch }, credentials) => {
     fb.auth
       .createUserWithEmailAndPassword(credentials.email, credentials.password)
       .then(user => {
@@ -52,7 +46,7 @@ const actions = {
         )
       })
   },
-  loginUser({ commit, dispatch }, credentials) {
+  loginUser: ({ commit, dispatch }, credentials) => {
     fb.auth
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then(user => {
@@ -73,7 +67,7 @@ const actions = {
         )
       })
   },
-  getUserData({ commit, dispatch }, uid) {
+  getUserData: ({ commit, dispatch }, uid) => {
     if (localStorage.getItem('userData')) {
       commit('SET_USER_DATA', JSON.parse(localStorage.getItem('userData')))
     } else {
@@ -99,7 +93,7 @@ const actions = {
         })
     }
   },
-  logoutUser({ commit, dispatch }) {
+  logoutUser: ({ commit, dispatch }) => {
     fb.auth
       .signOut()
       .then(() => {
