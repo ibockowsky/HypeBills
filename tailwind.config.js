@@ -1,6 +1,15 @@
 module.exports = {
   purge: false,
   theme: {
+    maxHeight: {
+      '64': '16rem',
+      '256': '64rem'
+    },
+    height: {
+      '128': '32rem',
+      '192': '48rem',
+      '256': '64rem'
+    },
     linearGradientDirections: {
       // defaults to these values
       t: 'to top',

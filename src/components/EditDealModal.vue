@@ -24,16 +24,19 @@
         <div class="mt-2">
           <form class="w-full max-w-lg">
             <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                <BaseInput
+              <div class="w-full  px-3 mb-6 md:mb-0">
+                <BaseAutocompleteInput
                   label="Title"
                   v-model="$v.dealForm.title.$model"
                   type="text"
                   :errorClass="$v.dealForm.title.$error"
+                  :api_url="stockx_api"
                   @blur="$v.dealForm.title.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/4 px-3">
+            </div>
+            <div class="flex flex-wrap -mx-3 mb-6">
+              <div class="w-full md:w-3/4 px-3">
                 <BaseInput
                   label="Size"
                   v-model="$v.dealForm.size.$model"
@@ -53,7 +56,7 @@
               </div>
             </div>
             <div class="flex flex-wrap -mx-3 mb-2">
-              <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
                 <BaseInput
                   label="Retail"
                   v-model="$v.dealForm.retail.$model"
@@ -62,7 +65,7 @@
                   @blur="$v.dealForm.retail.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
                 <BaseInput
                   label="Payout"
                   v-model="$v.dealForm.payout.$model"
@@ -71,7 +74,7 @@
                   @blur="$v.dealForm.payout.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-1/6 px-3 mb-6 md:mb-0">
                 <!-- <BaseInput
                       label="Currency"
                       v-model="$v.dealForm.currency.$model"
@@ -89,7 +92,7 @@
               </div>
             </div>
             <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                 <label class="block text-white text-sm font-bold mb-2">
                   Date
                 </label>
@@ -107,7 +110,7 @@
                   is-dark
                 />
               </div>
-              <div class="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-3/4 px-3 mb-6 md:mb-0">
                 <BaseInput
                   label="Where"
                   v-model="$v.dealForm.where.$model"
@@ -177,6 +180,8 @@ export default {
       where: '',
       status: ''
     },
+    stockx_api:
+      'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3',
     status_options: ['unknown', 'on hold', 'sold', 'in transit'],
     currency_options: ['PLN', 'EUR', 'USD', 'GBP']
   }),

@@ -22,7 +22,7 @@
       >
     </select> -->
     <div
-      class="shadow appearance-none border border-gray-800 rounded capitalize w-full py-2 px-3 text-gray-500 bg-gray-700 leading-tight focus:outline-none select-none"
+      class="shadow appearance-none border border-gray-800 rounded capitalize w-full py-2 px-3 text-center text-gray-500 bg-gray-700 leading-tight focus:outline-none select-none"
       :tabindex="tabindex"
       @click="open = !open"
       @blur="open = false"

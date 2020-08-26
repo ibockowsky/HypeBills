@@ -71,10 +71,10 @@ export default {
     },
     editDeal(id) {
       this.$router.push(`deals/${id}`)
-    },
-    selectDeal(e) {
-      console.log(e)
     }
+    // selectDeal(e) {
+    //   console.log(e)
+    // }
   }
 }
 </script>
