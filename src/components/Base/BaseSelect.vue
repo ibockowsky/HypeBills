@@ -60,9 +60,6 @@ export default {
       default: ''
     },
     value: { type: String },
-    errorClass: {
-      type: Boolean
-    },
     options: {
       type: Array,
       required: true
@@ -73,20 +70,15 @@ export default {
       default: 0
     }
   },
-  watch: {
-    value() {
-      this.selected = this.options[this.options.indexOf(this.value)]
-    }
-  },
   data() {
     return {
-      selected: this.value
-        ? this.options[this.options.indexOf(this.value)]
-        : this.options[0],
+      selected: null,
       open: false
     }
   },
   mounted() {
+    const selected = this.options.find(option => option === this.value)
+    this.selected = selected ? selected : this.options[0]
     this.$emit('input', this.selected)
   }
 }

@@ -48,10 +48,9 @@
               <div class="w-full md:w-1/4 px-3">
                 <BaseSelect
                   label="Status"
-                  v-model="$v.dealForm.status.$model"
-                  :options="status_options"
-                  :errorClass="$v.dealForm.status.$error"
-                  @blur="$v.dealForm.status.$touch()"
+                  v-model="dealForm.status"
+                  :options="['unknown', 'on hold', 'sold', 'in transit']"
+                  :errorClass="dealForm.status"
                 />
               </div>
             </div>
@@ -84,10 +83,8 @@
                     /> -->
                 <BaseSelect
                   label="Currency"
-                  v-model="$v.dealForm.currency.$model"
-                  :options="currency_options"
-                  :errorClass="$v.dealForm.currency.$error"
-                  @blur="$v.dealForm.currency.$touch()"
+                  v-model="dealForm.currency"
+                  :options="['PLN', 'EUR', 'USD', 'GBP']"
                 />
               </div>
             </div>
@@ -129,7 +126,7 @@
               class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-yellow-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-yellow-600 focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
               :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
               :disabled="$v.dealForm.$anyError"
-              @click="editDeal"
+              @click="edit"
             >
               Edit
             </button>
@@ -153,6 +150,9 @@
 import { required } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
 
+const stockx_api =
+  'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3'
+
 export default {
   name: 'EditDealModal',
   props: {
@@ -165,35 +165,14 @@ export default {
     ...mapGetters({
       getDeal: 'deals/getDeal'
     }),
-    deal() {
+    dealForm() {
       return this.getDeal(this.dealID)
     }
   },
-  data: () => ({
-    dealForm: {
-      title: '',
-      size: '',
-      retail: '',
-      payout: '',
-      currency: '',
-      date: new Date(),
-      where: '',
-      status: ''
-    },
-    stockx_api:
-      'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3',
-    status_options: ['unknown', 'on hold', 'sold', 'in transit'],
-    currency_options: ['PLN', 'EUR', 'USD', 'GBP']
-  }),
-  mounted() {
-    this.dealForm.title = this.deal.title
-    this.dealForm.size = this.deal.size
-    this.dealForm.retail = this.deal.retail
-    this.dealForm.payout = this.deal.payout
-    this.dealForm.currency = this.deal.currency
-    this.dealForm.date = this.deal.date
-    this.dealForm.where = this.deal.where
-    this.dealForm.status = this.deal.status
+  data() {
+    return {
+      stockx_api
+    }
   },
   validations: {
     dealForm: {
@@ -201,19 +180,17 @@ export default {
       size: {},
       retail: { required },
       payout: {},
-      currency: { required },
-      where: {},
-      status: { required }
+      where: {}
     }
   },
   methods: {
     ...mapActions({
-      EDIT_DEAL: 'deals/editDeal'
+      editDeal: 'deals/editDeal'
     }),
     toggleEditModal() {
       this.$router.go(-1)
     },
-    editDeal() {
+    edit() {
       this.$v.$touch()
       if (this.$v.$invalid) {
         return
@@ -223,7 +200,7 @@ export default {
         //   .then(() => {
         //     this.$router.go(-1)
         //   })
-        this.EDIT_DEAL({ ...this.dealForm, id: this.dealID }).then(() => {
+        this.editDeal({ ...this.dealForm, id: this.dealID }).then(() => {
           this.$router.go(-1)
         })
       }

@@ -57,16 +57,26 @@ const actions = {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
+          const {
+            title,
+            size,
+            retail,
+            payout,
+            currency,
+            date,
+            where,
+            status
+          } = doc.data()
           let tempObject = {
             id: doc.id,
-            title: doc.data().title,
-            size: doc.data().size,
-            retail: doc.data().retail,
-            payout: doc.data().payout,
-            currency: doc.data().currency,
-            date: doc.data().date.toDate(),
-            where: doc.data().where,
-            status: doc.data().status
+            title,
+            size,
+            retail,
+            payout,
+            currency,
+            date: date.toDate(),
+            where,
+            status
           }
           tempArray.push(tempObject)
         })

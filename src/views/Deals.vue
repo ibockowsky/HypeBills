@@ -47,15 +47,25 @@ export default {
   },
   methods: {
     addDeal(items) {
+      const {
+        title,
+        size,
+        retail,
+        payout,
+        currency,
+        date,
+        where,
+        status
+      } = items
       const payload = {
-        title: items.title,
-        size: items.size,
-        retail: items.retail,
-        payout: items.payout,
-        currency: items.currency,
-        date: items.date,
-        where: items.where,
-        status: items.status
+        title,
+        size,
+        retail,
+        payout,
+        currency,
+        date,
+        where,
+        status: items
       }
       this.$store.dispatch('deals/addDeal', payload)
       this.addingModal = false

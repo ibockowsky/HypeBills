@@ -12,6 +12,11 @@
 import { mapState, mapGetters } from 'vuex'
 export default {
   name: 'Home',
+  data() {
+    return {
+      username: this.userData ? this.userData.username : ''
+    }
+  },
   mounted() {
     if (this.isLoggedIn) {
       this.$store.dispatch('user/getUserData', this.getUserId)
@@ -26,11 +31,6 @@ export default {
   watch: {
     userData() {
       this.username = this.userData.username
-    }
-  },
-  data() {
-    return {
-      username: this.userData ? this.userData.username : ''
     }
   }
 }
