@@ -11,7 +11,7 @@
       class="flex items-center justify-center md:border border-gray-800 shadow-lg bg-gray-900 w-full md:w-3/4 xl:w-2/5 sm:mx-auto rounded z-50"
     >
       <div
-        class="py-4 text-leftx px-2 overflow-y-auto overflow-x-hidden h-192 sm:h-auto"
+        class="py-4 text-leftx px-2 overflow-y-auto overflow-x-hidden max-h-screen sm:h-auto"
       >
         <div class="flex justify-between items-center pb-3">
           <p class="text-2xl text-white font-bold">Add deal</p>
@@ -59,7 +59,7 @@
               <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
                 <BaseInput
                   label="Retail"
-                  v-model="$v.dealForm.retail.$model"
+                  v-model.number="$v.dealForm.retail.$model"
                   type="text"
                   :errorClass="$v.dealForm.retail.$error"
                   @blur="$v.dealForm.retail.$touch()"
@@ -68,7 +68,7 @@
               <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
                 <BaseInput
                   label="Payout"
-                  v-model="$v.dealForm.payout.$model"
+                  v-model.number="$v.dealForm.payout.$model"
                   type="text"
                   :errorClass="$v.dealForm.payout.$error"
                   @blur="$v.dealForm.payout.$touch()"
@@ -92,7 +92,7 @@
               </div>
             </div>
             <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-3/12 px-3 mb-6 md:mb-0">
                 <label class="block text-white text-sm font-bold mb-2">
                   Date
                 </label>
@@ -110,7 +110,15 @@
                   is-dark
                 />
               </div>
-              <div class="w-full md:w-3/4 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-2/12 px-3 mb-6 md:mb-0">
+                <BaseInput
+                  label="Qty."
+                  v-model.number="$v.qty.$model"
+                  :errorClass="$v.qty.$error"
+                  @blur="$v.qty.$touch()"
+                />
+              </div>
+              <div class="w-full md:w-7/12 px-3 mb-6 md:mb-0">
                 <BaseInput
                   label="Where"
                   v-model="$v.dealForm.where.$model"
@@ -165,6 +173,7 @@ export default {
       where: '',
       status: ''
     },
+    qty: 1,
     stockx_api:
       'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3',
     status_options: ['unknown', 'on hold', 'sold', 'in transit'],
@@ -179,7 +188,8 @@ export default {
       currency: { required },
       where: {},
       status: { required }
-    }
+    },
+    qty: { required }
   },
   methods: {
     toggleAddModal() {
@@ -190,7 +200,11 @@ export default {
       if (this.$v.$invalid) {
         return
       } else {
-        this.$emit('add-deal', deal)
+        if (this.qty > 1) {
+          for (let i = 0; i < this.qty; i++) {
+            this.$emit('add-deal', deal)
+          }
+        } else this.$emit('add-deal', deal)
       }
     }
   }
