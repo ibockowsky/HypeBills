@@ -9,18 +9,15 @@ const state = {
 const mutations = {
   ADD_ALERT: (state, alert) => state.alerts.push(alert),
   REMOVE_ALERT: (state, alert) =>
-    state.alerts.splice(state.alerts.indexOf(alert), 1)
+    (state.alerts = state.alerts.filter(a => a !== alert))
 }
 
 const actions = {
   addAlert: ({ commit }, alert) => {
-    alert.id = uuid.v4()
-    commit('ADD_ALERT', alert)
+    commit('ADD_ALERT', { ...alert, id: uuid.v4() })
   },
   removeAlert: ({ commit }, alert) => commit('REMOVE_ALERT', alert)
 }
 
-const getters = {
-  getAlerts: state => state.alerts
-}
+const getters = {}
 export { state, mutations, actions, getters }

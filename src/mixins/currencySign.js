@@ -1,7 +1,7 @@
 export const currencySign = {
   methods: {
     currencySign: currency_name => {
-      let currency_symbols = {
+      const currency_symbols = {
         USD: '$', // US Dollar
         EUR: '€', // Euro
         CRC: '₡', // Costa Rican Colón

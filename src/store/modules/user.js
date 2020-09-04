@@ -77,10 +77,10 @@ const actions = {
         .get()
         .then(querySnapshot => {
           querySnapshot.forEach(doc => {
-            let tempObject = {
+            const userObject = {
               username: doc.data().name
             }
-            commit('SET_USER_DATA', tempObject)
+            commit('SET_USER_DATA', userObject)
             localStorage.setItem('userData', JSON.stringify(tempObject))
           })
         })

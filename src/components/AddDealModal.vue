@@ -157,10 +157,16 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 
 export default {
   name: 'AddDealModal',
+  computed: {
+    ...mapGetters({
+      uid: 'user/getUserId'
+    })
+  },
   data: () => ({
     dealForm: {
       title: '',
@@ -191,6 +197,7 @@ export default {
       this.$emit('toggle-modal')
     },
     addDeal(deal) {
+      deal = { ...deal, uid: this.uid }
       this.$v.$touch()
       if (this.$v.$invalid) {
         return

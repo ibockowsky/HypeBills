@@ -24,7 +24,7 @@
     <div
       class="shadow appearance-none border border-gray-800 rounded capitalize w-full py-2 px-3 text-center text-gray-500 bg-gray-700 leading-tight focus:outline-none select-none"
       :tabindex="tabindex"
-      @click="open = !open"
+      @click.prevent="open = !open"
       @blur="open = false"
     >
       <div>
@@ -38,11 +38,7 @@
           class="py-1 px-4 my-1 rounded hover:bg-gray-700"
           v-for="(option, $index) of options"
           :key="$index"
-          @click.prevent="
-            selected = option
-            open = 'false'
-            $emit('input', option)
-          "
+          @click.prevent="changeSelect(option)"
         >
           {{ option }}
         </div>
@@ -80,6 +76,13 @@ export default {
     const selected = this.options.find(option => option === this.value)
     this.selected = selected ? selected : this.options[0]
     this.$emit('input', this.selected)
+  },
+  methods: {
+    changeSelect(option) {
+      this.selected = option
+      this.open = 'false'
+      this.$emit('input', option)
+    }
   }
 }
 </script>

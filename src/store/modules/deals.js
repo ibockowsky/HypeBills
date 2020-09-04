@@ -12,27 +12,25 @@ const mutations = {
     state.deals.sort((a, b) => b.date - a.date)
   },
   REMOVE_DEAL: (state, id) => {
-    const index = state.deals.findIndex(item => item.id == id)
-    if (index >= 0) {
-      state.deals.splice(index, 1)
-    }
+    state.deals = state.deals.filter(deal => deal.id !== id)
   },
   UPDATE_DEAL: (state, deal) => {
-    const index = state.deals.findIndex(item => item.id == deal.id)
-    state.deals.splice(index, 1, deal)
+    state.deals = state.deals.map(item => {
+      if (item.id === deal.id) {
+        item = deal
+      }
+      return item
+    })
   }
 }
 
 const actions = {
-  addDeal: ({ commit, dispatch, rootGetters }, deal) => {
-    const uid = rootGetters['user/getUserId']
-    deal = { ...deal, ...{ uid: uid } }
+  addDeal: ({ commit, dispatch }, deal) => {
     fb.db
       .collection('deals')
       .add(deal)
       .then(docRef => {
-        deal = { ...deal, ...{ id: docRef.id } }
-        commit('ADD_DEAL', deal)
+        commit('ADD_DEAL', { ...deal, id: docRef.id })
         dispatch(
           'alerts/addAlert',
           { content: 'Added!', type: 'success' },
@@ -57,28 +55,7 @@ const actions = {
       .get()
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
-          const {
-            title,
-            size,
-            retail,
-            payout,
-            currency,
-            date,
-            where,
-            status
-          } = doc.data()
-          let tempObject = {
-            id: doc.id,
-            title,
-            size,
-            retail,
-            payout,
-            currency,
-            date: date.toDate(),
-            where,
-            status
-          }
-          tempArray.push(tempObject)
+          tempArray.push({ ...doc.data(), id: doc.id })
         })
         commit('ADD_DEALS', tempArray)
       })
@@ -107,7 +84,7 @@ const actions = {
         )
       })
   },
-  editDeal: ({ commit, dispatch }, deal) => {
+  updateDeal: ({ commit, dispatch }, deal) => {
     fb.db
       .collection('deals')
       .doc(deal.id)
@@ -131,7 +108,7 @@ const actions = {
 }
 
 const getters = {
-  getDeal: state => id => state.deals.filter(item => item.id === id)[0]
+  getDeal: state => id => state.deals.find(item => item.id === id)
 }
 
 export { state, mutations, actions, getters }

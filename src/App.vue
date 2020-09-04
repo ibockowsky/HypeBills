@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import Navbar from '@/components/Navbar.vue'
 import Alert from '@/components/Alert.vue'
 
@@ -27,8 +27,8 @@ export default {
     Alert
   },
   computed: {
-    ...mapGetters({
-      alerts: 'alerts/getAlerts'
+    ...mapState({
+      alerts: state => state.alerts.alerts
     })
   },
   methods: {

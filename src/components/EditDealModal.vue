@@ -161,9 +161,15 @@ export default {
     ...mapGetters({
       getDeal: 'deals/getDeal'
     }),
-    dealForm() {
+    deal() {
       return this.getDeal(this.dealID)
     }
+  },
+  data: () => ({
+    dealForm: null
+  }),
+  created() {
+    this.dealForm = { ...this.deal, date: this.deal.date.toDate() }
   },
   validations: {
     dealForm: {
@@ -176,7 +182,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      editDeal: 'deals/editDeal'
+      updateDeal: 'deals/updateDeal'
     }),
     toggleEditModal() {
       this.$router.go(-1)
@@ -186,12 +192,7 @@ export default {
       if (this.$v.$invalid) {
         return
       } else {
-        // this.$store
-        //   .dispatch('deals/editDeal', { ...this.dealForm, id: this.dealID })
-        //   .then(() => {
-        //     this.$router.go(-1)
-        //   })
-        this.editDeal({ ...this.dealForm, id: this.dealID }).then(() => {
+        this.updateDeal({ ...this.dealForm, id: this.dealID }).then(() => {
           this.$router.go(-1)
         })
       }
