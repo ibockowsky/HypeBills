@@ -165,11 +165,11 @@ export default {
       return this.getDeal(this.dealID)
     }
   },
-  data: () => ({
-    dealForm: null
-  }),
+  data: () => ({ dealForm: null }),
   created() {
-    this.dealForm = { ...this.deal, date: this.deal.date.toDate() }
+    const dealDate =
+      this.deal.date instanceof Date ? this.deal.date : this.deal.date.toDate()
+    this.dealForm = { ...this.deal, date: dealDate }
   },
   validations: {
     dealForm: {
