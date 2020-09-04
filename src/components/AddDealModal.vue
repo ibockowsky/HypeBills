@@ -197,16 +197,16 @@ export default {
       this.$emit('toggle-modal')
     },
     addDeal(deal) {
-      deal = { ...deal, uid: this.uid }
+      const payload = { ...deal, uid: this.uid }
       this.$v.$touch()
       if (this.$v.$invalid) {
         return
       } else {
         if (this.qty > 1) {
           for (let i = 0; i < this.qty; i++) {
-            this.$emit('add-deal', deal)
+            this.$emit('add-deal', payload)
           }
-        } else this.$emit('add-deal', deal)
+        } else this.$emit('add-deal', payload)
       }
     }
   }
