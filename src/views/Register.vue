@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import {
   required,
   email,
@@ -116,9 +117,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      registerUser: 'user/registerUser'
+    }),
     register() {
       if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {
-        this.$store.dispatch('user/registerUser', this.userForm)
+        this.registerUser(this.userForm)
         this.alert = ''
       } else {
         this.alert = 'The form is not completed'

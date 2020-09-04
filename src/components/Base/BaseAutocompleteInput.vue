@@ -60,15 +60,12 @@
 import { formFieldMixin } from '@/mixins/formFieldMixin'
 import axios from 'axios'
 
+const api_url =
+  'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3'
+
 export default {
   name: 'BaseAutocompleteInput',
   mixins: [formFieldMixin],
-  props: {
-    api_url: {
-      type: String,
-      required: true
-    }
-  },
   computed: {
     listeners() {
       return {
@@ -79,31 +76,51 @@ export default {
   },
   data: () => ({
     results: [],
-    open: false
+    open: false,
+    api_url
   }),
   watch: {
+    // value() {
+    //   if (
+    //     this.value.length === 0 ||
+    //     this.results.some(item => item.name === this.value)
+    //   ) {
+    //     this.results = []
+    //     this.open = false
+    //   } else {
+    //     axios
+    //       .post(this.api_url, {
+    //         params: `query=${this.value}&facets=*&filters=`
+    //       })
+    //       .then(response => {
+    //         let items = response.data.hits.splice(0, 10)
+    //         this.results = items
+    //         if (this.results.some(item => item.name === this.value)) return
+    //         this.open = true
+    //       })
+    //   }
+    // }
     value() {
-      if (
-        this.value.length === 0 ||
-        this.results.some(item => item.name === this.value)
-      ) {
-        this.results = []
-        this.open = false
-      } else {
-        axios
-          .post(this.api_url, {
-            params: `query=${this.value}&facets=*&filters=`
-          })
-          .then(response => {
-            let items = response.data.hits.splice(0, 10)
-            this.results = items
-            if (this.results.some(item => item.name === this.value)) return
-            this.open = true
-          })
-      }
+      this.findItems(this.value)
     }
   },
   methods: {
+    findItems(input) {
+      if (input.length < 2 || this.results.some(item => item.name === input)) {
+        this.results = []
+        this.open = false
+        return
+      }
+      axios
+        .post(this.api_url, {
+          params: `query=${input}&facets=*&filters=`
+        })
+        .then(response => {
+          let items = response.data.hits.splice(0, 10)
+          this.results = items
+          this.open = true
+        })
+    },
     handleClick(name) {
       this.$emit('input', name)
     }

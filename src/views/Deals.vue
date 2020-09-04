@@ -1,9 +1,9 @@
 <template>
   <div>
     <AddDealModal
-      v-if="addingModal"
-      @toggle-modal="addingModal = !addingModal"
-      @add-deal="addDeal"
+      v-if="showAddingModal"
+      @toggle-modal="showAddingModal = !showAddingModal"
+      @add-deal="add"
     />
     <router-view />
     <div
@@ -13,7 +13,7 @@
         <span class="text-3xl text-white ">Deals</span>
         <button
           class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-full focus:outline-none"
-          @click="addingModal = !addingModal"
+          @click="showAddingModal = !showAddingModal"
         >
           <icon name="plus-circle" class="w-6 h-6"></icon>
         </button>
@@ -26,7 +26,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import TableDeals from '@/components/TableDeals.vue'
 import AddDealModal from '@/components/AddDealModal.vue'
 
@@ -38,15 +38,19 @@ export default {
   },
   data() {
     return {
-      addingModal: false,
+      showAddingModal: false,
       pageOfDeals: []
     }
   },
   created() {
-    this.$store.dispatch('deals/getDeals')
+    this.getDeals()
   },
   methods: {
-    addDeal(items) {
+    ...mapActions({
+      addDeal: 'deals/addDeal',
+      getDeals: 'deals/getDeals'
+    }),
+    add(items) {
       const {
         title,
         size,
@@ -65,10 +69,10 @@ export default {
         currency,
         date,
         where,
-        status: items
+        status
       }
-      this.$store.dispatch('deals/addDeal', payload)
-      this.addingModal = false
+      this.addDeal(payload)
+      this.showAddingModal = false
     },
     onChangePage(pageOfDeals) {
       this.pageOfDeals = pageOfDeals

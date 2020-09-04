@@ -66,7 +66,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 export default {
   name: 'Navbar',
   computed: { ...mapGetters('user', ['isLoggedIn']) },
@@ -74,11 +74,11 @@ export default {
     showMenu: false
   }),
   methods: {
+    ...mapActions({
+      logout: 'user/logoutUser'
+    }),
     toggleNavbar() {
       this.showMenu = !this.showMenu
-    },
-    logout() {
-      this.$store.dispatch('user/logoutUser')
     }
   }
 }

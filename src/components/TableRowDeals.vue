@@ -6,6 +6,7 @@
     <td
       class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm"
       v-for="(col, $key, $index) in tableCol"
+      :class="{ hidden: $key === 'id' || $key === 'uid' }"
       :key="$index"
     >
       <template v-if="$key === 'status'">
@@ -33,10 +34,19 @@
           <span class="relative">{{ col }}</span>
         </span>
       </template>
+      <template v-else-if="$key === 'id' || $key === 'uid'"></template>
       <template v-else-if="$key === 'retail' || $key === 'payout'">
         <span class="text-gray-200 whitespace-no-wrap"
           >{{ col ? col : '0' }} {{ currencySign(tableCol.currency) }}</span
         >
+      </template>
+      <template v-else-if="$key === 'date'">
+        <span
+          class="text-gray-200 whitespace-no-wrap"
+          :class="{ 'text-gray-800': !col }"
+        >
+          {{ col ? col.toLocaleDateString() : 'undefined' }}
+        </span>
       </template>
       <span
         v-else
@@ -79,28 +89,12 @@ export default {
   },
   watch: {
     rowData() {
-      this.tableCol.title = this.rowData.title
-      this.tableCol.size = this.rowData.size
-      this.tableCol.retail = this.rowData.retail
-      this.tableCol.payout = this.rowData.payout
-      this.tableCol.currency = this.rowData.currency
-      this.tableCol.date = this.rowData.date.toLocaleDateString()
-      this.tableCol.where = this.rowData.where
-      this.tableCol.status = this.rowData.status
+      this.tableCol = this.rowData
     }
   },
   data() {
     return {
-      tableCol: {
-        title: this.rowData.title,
-        size: this.rowData.size,
-        retail: this.rowData.retail,
-        payout: this.rowData.payout,
-        currency: this.rowData.currency,
-        date: this.rowData.date.toLocaleDateString(),
-        where: this.rowData.where,
-        status: this.rowData.status
-      }
+      tableCol: this.rowData
     }
   },
   methods: {

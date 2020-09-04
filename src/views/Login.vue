@@ -49,6 +49,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { required, email, strongPassword } from 'vuelidate/lib/validators'
 
 export default {
@@ -79,9 +80,12 @@ export default {
     }
   },
   methods: {
+    ...mapActions({
+      loginUser: 'user/loginUser'
+    }),
     login() {
       if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {
-        this.$store.dispatch('user/loginUser', this.userForm)
+        this.loginUser(this.userForm)
         this.alert = ''
       } else {
         this.alert = 'The form is not completed'

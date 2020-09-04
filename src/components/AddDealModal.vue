@@ -30,7 +30,6 @@
                   v-model="$v.dealForm.title.$model"
                   type="text"
                   :errorClass="$v.dealForm.title.$error"
-                  :api_url="stockx_api"
                   @blur="$v.dealForm.title.$touch()"
                 />
               </div>
@@ -160,9 +159,6 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 
-const stockx_api =
-  'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3'
-
 export default {
   name: 'AddDealModal',
   data: () => ({
@@ -176,8 +172,7 @@ export default {
       where: '',
       status: ''
     },
-    qty: 1,
-    stockx_api
+    qty: 1
   }),
   validations: {
     dealForm: {

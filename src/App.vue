@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapActions } from 'vuex'
 import Navbar from '@/components/Navbar.vue'
 import Alert from '@/components/Alert.vue'
 
@@ -32,9 +32,9 @@ export default {
     })
   },
   methods: {
-    removeAlert(alert) {
-      this.$store.dispatch('alerts/removeAlert', alert)
-    }
+    ...mapActions({
+      removeAlert: 'alerts/removeAlert'
+    })
   }
 }
 </script>
