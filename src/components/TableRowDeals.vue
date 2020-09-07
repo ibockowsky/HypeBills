@@ -24,7 +24,11 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.retail }"
       >
-        {{ rowData.retail ? rowData.retail : 'undefined' }}
+        {{
+          rowData.retail
+            ? `${rowData.retail} ${currencySign(rowData.currency)}`
+            : 'undefined'
+        }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -32,7 +36,11 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.payout }"
       >
-        {{ rowData.payout ? rowData.payout : 'undefined' }}
+        {{
+          rowData.payout
+            ? `${rowData.payout} ${currencySign(rowData.currency)}`
+            : 'undefined'
+        }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -40,7 +48,7 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.currency }"
       >
-        {{ rowData.currency ? rowData.currency : 'undefined' }}
+        {{ rowData.currency ? `${rowData.currency}` : 'undefined' }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -48,11 +56,6 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.date }"
       >
-        <!-- {{
-          rowData.date
-            ? rowData.date.toDate().toLocaleDateString()
-            : 'undefined'
-        }} -->
         {{
           rowData.date instanceof Date
             ? rowData.date.toLocaleDateString()

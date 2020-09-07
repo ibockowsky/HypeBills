@@ -1,4 +1,5 @@
 const fb = require('@/services/firebase.js')
+import { calcSumByCondtition } from '@/mixins/calcHelper.js'
 export const namespaced = true
 
 const state = {
@@ -108,7 +109,51 @@ const actions = {
 }
 
 const getters = {
-  getDeal: state => id => state.deals.find(item => item.id === id)
+  getDeal: state => id => state.deals.find(item => item.id === id),
+  getTotalOutgoings: (state, getters, rootState, rootGetters) => {
+    const totalOutgoings = calcSumByCondtition(
+      state.deals,
+      'retail',
+      null,
+      null,
+      rootGetters['user/getBaseCurrency'],
+      rootState.user.currencies
+    )
+    return totalOutgoings
+  },
+  getTotalIncomings: (state, getters, rootState, rootGetters) => {
+    const totalIncomings = calcSumByCondtition(
+      state.deals,
+      'payout',
+      'status',
+      'sold',
+      rootGetters['user/getBaseCurrency'],
+      rootState.user.currencies
+    )
+    return totalIncomings
+  },
+  getCurrentHold: (state, getters, rootState, rootGetters) => {
+    const currentHold = calcSumByCondtition(
+      state.deals,
+      'retail',
+      'status',
+      'on hold',
+      rootGetters['user/getBaseCurrency'],
+      rootState.user.currencies
+    )
+    return currentHold
+  },
+  getProbableIncome: (state, getters, rootState, rootGetters) => {
+    const probableIncome = calcSumByCondtition(
+      state.deals,
+      'payout',
+      'status',
+      'on hold',
+      rootGetters['user/getBaseCurrency'],
+      rootState.user.currencies
+    )
+    return probableIncome
+  }
 }
 
 export { state, mutations, actions, getters }

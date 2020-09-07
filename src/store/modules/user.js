@@ -1,16 +1,22 @@
 import router from '@/router'
+import axios from 'axios'
 const fb = require('@/services/firebase.js')
 
 export const namespaced = true
 
 const state = {
   currentUser: null,
-  currentUserData: null
+  currentUserData: {
+    name: '',
+    base_currency: 'PLN'
+  },
+  currencies: []
 }
 const mutations = {
   SET_USER: (state, user) => (state.currentUser = user),
   SET_USER_DATA: (state, user_data) => (state.currentUserData = user_data),
-  CLEAR_USER_DATA: state => (state.currentUser = null)
+  CLEAR_USER_DATA: state => (state.currentUser = null),
+  SET_CURRENCIES: (state, currencies) => (state.currencies = currencies)
 }
 const actions = {
   registerUser: ({ commit, dispatch }, credentials) => {
@@ -27,6 +33,7 @@ const actions = {
           .collection('users')
           .add({
             name: credentials.username,
+            base_currency: 'PLN',
             uid: user.user.uid
           })
           .catch(err => {
@@ -67,31 +74,28 @@ const actions = {
         )
       })
   },
-  getUserData: ({ commit, dispatch }, uid) => {
-    if (localStorage.getItem('userData')) {
-      commit('SET_USER_DATA', JSON.parse(localStorage.getItem('userData')))
-    } else {
-      fb.db
-        .collection('users')
-        .where('uid', '==', uid)
-        .get()
-        .then(querySnapshot => {
-          querySnapshot.forEach(doc => {
-            const userObject = {
-              username: doc.data().name
-            }
-            commit('SET_USER_DATA', userObject)
-            localStorage.setItem('userData', JSON.stringify(tempObject))
-          })
+  getUserData: ({ state, commit, dispatch }) => {
+    fb.db
+      .collection('users')
+      .where('uid', '==', state.currentUser.uid)
+      .get()
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          const userObject = {
+            username: doc.data().name,
+            base_currency: doc.data().base_currency
+          }
+          commit('SET_USER_DATA', userObject)
+          dispatch('getCurrencies')
         })
-        .catch(err => {
-          dispatch(
-            'alerts/addAlert',
-            { title: 'Error', content: err.message, type: 'error' },
-            { root: true }
-          )
-        })
-    }
+      })
+      .catch(err => {
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
+      })
   },
   logoutUser: ({ commit, dispatch }) => {
     fb.auth
@@ -113,11 +117,28 @@ const actions = {
           { root: true }
         )
       })
+  },
+  getCurrencies: ({ state, commit }) => {
+    axios
+      .get(
+        `https://api.exchangerate.host/latest?base=${state.currentUserData.base_currency}`
+      )
+      .then(response => {
+        commit('SET_CURRENCIES', response.data.rates)
+      })
+      .catch(err => {
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
+      })
   }
 }
 const getters = {
   getUserId: state => state.currentUser.uid,
-  isLoggedIn: state => !!state.currentUser
+  isLoggedIn: state => !!state.currentUser,
+  getBaseCurrency: state => state.currentUserData.base_currency
 }
 
 export { state, mutations, actions, getters }

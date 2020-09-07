@@ -2,6 +2,7 @@
   <div id="app">
     <Navbar />
     <div class="mx-auto w-full">
+      <Summary v-if="isLoggedIn" />
       <router-view />
     </div>
     <vue-confirm-dialog></vue-confirm-dialog>
@@ -17,22 +18,33 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions, mapGetters } from 'vuex'
 import Navbar from '@/components/Navbar.vue'
 import Alert from '@/components/Alert.vue'
+import Summary from '@/components/Summary.vue'
 
 export default {
   components: {
     Navbar,
-    Alert
+    Alert,
+    Summary
+  },
+  created() {
+    if (this.isLoggedIn) {
+      this.getUserData()
+      this.getDeals()
+    }
   },
   computed: {
+    ...mapGetters('user', ['isLoggedIn']),
     ...mapState({
       alerts: state => state.alerts.alerts
     })
   },
   methods: {
     ...mapActions({
+      getUserData: 'user/getUserData',
+      getDeals: 'deals/getDeals',
       removeAlert: 'alerts/removeAlert'
     })
   }
