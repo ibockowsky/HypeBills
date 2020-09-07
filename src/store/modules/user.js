@@ -7,6 +7,7 @@ export const namespaced = true
 const state = {
   currentUser: null,
   currentUserData: {
+    id: 0,
     name: '',
     base_currency: 'PLN'
   },
@@ -16,7 +17,9 @@ const mutations = {
   SET_USER: (state, user) => (state.currentUser = user),
   SET_USER_DATA: (state, user_data) => (state.currentUserData = user_data),
   CLEAR_USER_DATA: state => (state.currentUser = null),
-  SET_CURRENCIES: (state, currencies) => (state.currencies = currencies)
+  SET_CURRENCIES: (state, currencies) => (state.currencies = currencies),
+  CHANGE_CURRENCY: (state, currency) =>
+    (state.currentUserData.base_currency = currency)
 }
 const actions = {
   registerUser: ({ commit, dispatch }, credentials) => {
@@ -82,6 +85,7 @@ const actions = {
       .then(querySnapshot => {
         querySnapshot.forEach(doc => {
           const userObject = {
+            id: doc.id,
             username: doc.data().name,
             base_currency: doc.data().base_currency
           }
@@ -107,7 +111,6 @@ const actions = {
           { content: 'Logged out!', type: 'success' },
           { root: true }
         )
-        localStorage.removeItem('userData')
         router.push('/login')
       })
       .catch(err => {
@@ -118,13 +121,30 @@ const actions = {
         )
       })
   },
-  getCurrencies: ({ state, commit }) => {
+  getCurrencies: ({ state, commit, dispatch }) => {
     axios
       .get(
         `https://api.exchangerate.host/latest?base=${state.currentUserData.base_currency}`
       )
       .then(response => {
         commit('SET_CURRENCIES', response.data.rates)
+      })
+      .catch(err => {
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
+      })
+  },
+  changeDefaultCurrency: ({ state, commit, dispatch }, currency) => {
+    fb.db
+      .collection('users')
+      .doc(state.currentUserData.id)
+      .set({ base_currency: currency }, { merge: true })
+      .then(() => {
+        commit('CHANGE_CURRENCY', currency)
+        dispatch('getCurrencies')
       })
       .catch(err => {
         dispatch(

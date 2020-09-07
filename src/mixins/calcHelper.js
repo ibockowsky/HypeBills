@@ -15,7 +15,6 @@ export const calcSumByCondtition = (
     sum = array.reduce((prev, cur) => {
       if (cur[to_condition] === condition) {
         if (cur.currency !== currency) {
-          console.log(cur.currency)
           const exchanged = parseFloat(
             (cur[to_sum] / currencies[cur.currency]).toFixed(2)
           )
@@ -33,7 +32,7 @@ export const calcSumByCondtition = (
       }
     }, 0)
   }
-  return sum
+  return Number(Math.round(sum + 'e2') + 'e-2')
 }
 
 export default { calcSumByCondtition }
