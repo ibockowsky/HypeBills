@@ -18,7 +18,7 @@ const mutations = {
   UPDATE_DEAL: (state, deal) => {
     state.deals = state.deals.map(item => {
       if (item.id === deal.id) {
-        item = deal
+        return deal
       }
       return item
     })
@@ -61,7 +61,11 @@ const actions = {
         commit('ADD_DEALS', tempArray)
       })
       .catch(err => {
-        dispatch('alerts/addError', err, { root: true })
+        dispatch(
+          'alerts/addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
       })
   },
   removeDeal: ({ commit, dispatch }, id) => {

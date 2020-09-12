@@ -25,8 +25,10 @@ const actions = {
   registerUser: ({ commit, dispatch }, credentials) => {
     fb.auth
       .createUserWithEmailAndPassword(credentials.email, credentials.password)
-      .then(user => {
-        commit('SET_USER', user)
+      .then(async user => {
+        await commit('SET_USER', user)
+        await dispatch('getUserData', user.user.uid)
+        await dispatch('deals/getDeals', {}, { root: true })
         dispatch(
           'alerts/addAlert',
           { content: 'Registered!', type: 'success' },
@@ -59,9 +61,10 @@ const actions = {
   loginUser: ({ commit, dispatch }, credentials) => {
     fb.auth
       .signInWithEmailAndPassword(credentials.email, credentials.password)
-      .then(user => {
-        commit('SET_USER', user)
-        dispatch('getUserData', user.user.uid)
+      .then(async user => {
+        await commit('SET_USER', user)
+        await dispatch('getUserData', user.user.uid)
+        await dispatch('deals/getDeals', {}, { root: true })
         dispatch(
           'alerts/addAlert',
           { content: 'Logged in!', type: 'success' },

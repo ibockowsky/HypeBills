@@ -52,6 +52,14 @@
             </router-link>
           </li>
           <li class="nav-item" v-if="isLoggedIn">
+            <router-link
+              class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75 focus:outline-none"
+              to="/bills"
+            >
+              <span class="ml-2">Bills</span>
+            </router-link>
+          </li>
+          <li class="nav-item" v-if="isLoggedIn">
             <span
               class="px-3 py-2 flex items-center text-xs uppercase font-bold leading-snug text-white hover:opacity-75 cursor-default"
               @click="logout"

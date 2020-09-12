@@ -8,6 +8,9 @@ import Register from '@/views/Register.vue'
 
 import Deals from '@/views/Deals.vue'
 import EditDealModal from '@/components/EditDealModal.vue'
+
+import Bills from '@/views/Bills.vue'
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -47,6 +50,12 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/bills',
+    name: 'Bills',
+    component: Bills,
+    meta: { requiresAuth: true }
   }
 ]
 

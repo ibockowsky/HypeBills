@@ -33,6 +33,7 @@ export default {
     if (this.isLoggedIn) {
       this.getUserData()
       this.getDeals()
+      this.getBills()
     }
   },
   computed: {
@@ -45,6 +46,7 @@ export default {
     ...mapActions({
       getUserData: 'user/getUserData',
       getDeals: 'deals/getDeals',
+      getBills: 'bills/getBills',
       removeAlert: 'alerts/removeAlert'
     })
   }
