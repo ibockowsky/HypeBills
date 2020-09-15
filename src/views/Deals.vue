@@ -27,6 +27,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex'
+import { D_ADD_DEAL } from '@/store/mutation-types.js'
 import TableDeals from '@/components/TableDeals.vue'
 import AddDealModal from '@/components/AddDealModal.vue'
 
@@ -34,7 +35,9 @@ export default {
   name: 'Deals',
   components: { TableDeals, AddDealModal },
   computed: {
-    ...mapState('deals', ['deals'])
+    ...mapState({
+      deals: state => state.deals.deals
+    })
   },
   data() {
     return {
@@ -45,7 +48,7 @@ export default {
 
   methods: {
     ...mapActions({
-      addDeal: 'deals/addDeal'
+      addDeal: D_ADD_DEAL
     }),
     add(items) {
       const {

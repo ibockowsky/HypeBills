@@ -29,6 +29,7 @@
 
 <script>
 import TableRowDeals from '@/components/TableRowDeals.vue'
+import { D_REMOVE_DEAL } from '@/store/mutation-types.js'
 export default {
   name: 'TableDeals',
   components: {
@@ -64,7 +65,7 @@ export default {
         },
         callback: confirm => {
           if (confirm) {
-            this.$store.dispatch('deals/removeDeal', id)
+            this.$store.dispatch(D_REMOVE_DEAL, id)
           }
         }
       })

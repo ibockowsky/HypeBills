@@ -7,18 +7,20 @@
     </div>
     <vue-confirm-dialog></vue-confirm-dialog>
     <div v-if="alerts.length > 0" class="absolute md:right-0 bottom-0">
-      <Alert
-        v-for="alert in alerts"
-        :key="alert.id"
-        :alert="alert"
-        @expired="removeAlert(alert)"
-      />
+      <Alert v-for="alert in alerts" :key="alert.id" :alert="alert" />
     </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
+import {
+  U_GET_USER_DATA,
+  B_GET_BILLS,
+  D_GET_DEALS,
+  U_IS_LOGGED_IN
+} from '@/store/mutation-types.js'
+
 import Navbar from '@/components/Navbar.vue'
 import Alert from '@/components/Alert.vue'
 import Summary from '@/components/Summary.vue'
@@ -37,17 +39,18 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('user', ['isLoggedIn']),
+    ...mapGetters({
+      isLoggedIn: U_IS_LOGGED_IN
+    }),
     ...mapState({
       alerts: state => state.alerts.alerts
     })
   },
   methods: {
     ...mapActions({
-      getUserData: 'user/getUserData',
-      getDeals: 'deals/getDeals',
-      getBills: 'bills/getBills',
-      removeAlert: 'alerts/removeAlert'
+      getUserData: U_GET_USER_DATA,
+      getDeals: D_GET_DEALS,
+      getBills: B_GET_BILLS
     })
   }
 }

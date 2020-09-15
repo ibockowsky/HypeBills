@@ -11,7 +11,8 @@ module.exports = {
       '256': '64rem'
     },
     minWidth: {
-      '1/4': '25%'
+      '1/4': '25%',
+      full: '100%'
     },
     extend: {
       colors: {

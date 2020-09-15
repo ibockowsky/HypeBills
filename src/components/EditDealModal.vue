@@ -148,7 +148,7 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
-
+import { D_GET_DEAL, D_UPDATE_DEAL } from '@/store/mutation-types.js'
 export default {
   name: 'EditDealModal',
   props: {
@@ -159,7 +159,7 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDeal: 'deals/getDeal'
+      getDeal: D_GET_DEAL
     }),
     deal() {
       return this.getDeal(this.dealID)
@@ -182,7 +182,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      updateDeal: 'deals/updateDeal'
+      updateDeal: D_UPDATE_DEAL
     }),
     toggleEditModal() {
       this.$router.go(-1)

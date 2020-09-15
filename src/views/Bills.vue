@@ -19,7 +19,7 @@
 
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
-
+import { B_ADD_BILL, U_GET_USER_ID } from '@/store/mutation-types.js'
 import Bill from '@/components/Bill.vue'
 
 export default {
@@ -30,12 +30,12 @@ export default {
       bills: state => state.bills.bills
     }),
     ...mapGetters({
-      uid: 'user/getUserId'
+      uid: U_GET_USER_ID
     })
   },
   methods: {
     ...mapActions({
-      add: 'bills/addBill'
+      add: B_ADD_BILL
     }),
     addBill() {
       const new_bill = {

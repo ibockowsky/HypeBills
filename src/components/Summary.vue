@@ -52,15 +52,23 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import {
+  D_GET_TOTAL_OUTGOINGS,
+  D_GET_TOTAL_INCOMINGS,
+  D_GET_CURRENT_HOLD,
+  D_GET_PROBABLE_INCOME,
+  U_GET_BASE_CURRENCY,
+  U_CHANGE_DEFAULT_CURRENCY
+} from '@/store/mutation-types.js'
 export default {
   name: 'Summary',
   computed: {
     ...mapGetters({
-      totalOutgoings: 'deals/getTotalOutgoings',
-      totalIncomings: 'deals/getTotalIncomings',
-      currentHold: 'deals/getCurrentHold',
-      probableIncome: 'deals/getProbableIncome',
-      getBaseCurrency: 'user/getBaseCurrency'
+      totalOutgoings: D_GET_TOTAL_OUTGOINGS,
+      totalIncomings: D_GET_TOTAL_INCOMINGS,
+      currentHold: D_GET_CURRENT_HOLD,
+      probableIncome: D_GET_PROBABLE_INCOME,
+      getBaseCurrency: U_GET_BASE_CURRENCY
     })
   },
   data: () => ({
@@ -69,7 +77,7 @@ export default {
   }),
   methods: {
     ...mapActions({
-      changeDefaultCurrency: 'user/changeDefaultCurrency'
+      changeDefaultCurrency: U_CHANGE_DEFAULT_CURRENCY
     }),
     changeCurrency() {
       this.changeDefaultCurrency(this.currency)

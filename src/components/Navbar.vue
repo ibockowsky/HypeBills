@@ -75,15 +75,20 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
+import { U_LOGOUT_USER, U_IS_LOGGED_IN } from '@/store/mutation-types.js'
 export default {
   name: 'Navbar',
-  computed: { ...mapGetters('user', ['isLoggedIn']) },
+  computed: {
+    ...mapGetters({
+      isLoggedIn: U_IS_LOGGED_IN
+    })
+  },
   data: () => ({
     showMenu: false
   }),
   methods: {
     ...mapActions({
-      logout: 'user/logoutUser'
+      logout: U_LOGOUT_USER
     }),
     toggleNavbar() {
       this.showMenu = !this.showMenu

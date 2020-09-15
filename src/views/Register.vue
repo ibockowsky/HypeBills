@@ -75,6 +75,7 @@
 
 <script>
 import { mapActions } from 'vuex'
+import { U_REGISTER_USER } from '@/store/mutation-types.js'
 import {
   required,
   email,
@@ -118,7 +119,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      registerUser: 'user/registerUser'
+      registerUser: U_REGISTER_USER
     }),
     register() {
       if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {

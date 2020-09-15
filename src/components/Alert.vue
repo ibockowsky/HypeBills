@@ -17,6 +17,9 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+import { A_REMOVE_ALERT } from '@/store/mutation-types.js'
+
 export default {
   name: 'Alert',
   props: {
@@ -26,7 +29,12 @@ export default {
     }
   },
   created() {
-    setTimeout(() => this.$emit('expired'), 3000)
+    setTimeout(() => this.removeAlert(this.alert), 3000)
+  },
+  methods: {
+    ...mapActions({
+      removeAlert: A_REMOVE_ALERT
+    })
   }
 }
 </script>

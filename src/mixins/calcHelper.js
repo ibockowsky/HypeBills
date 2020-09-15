@@ -1,4 +1,4 @@
-export const calcSumByCondtition = (
+export const calcSumByCondition = (
   array,
   to_sum,
   to_condition = null,
@@ -35,4 +35,4 @@ export const calcSumByCondtition = (
   return Number(Math.round(sum + 'e2') + 'e-2')
 }
 
-export default { calcSumByCondtition }
+export default { calcSumByCondition }

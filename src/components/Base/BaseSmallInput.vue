@@ -1,11 +1,12 @@
 <template>
   <div class="relative">
     <input
-      class="appearance-none w-full border-b border-gray-800 focus:border-green-700 text-gray-400 bg-transparent leading-tight focus:outline-none"
+      class="appearance-none w-full border-b border-gray-900 focus:border-green-700 text-gray-400 bg-transparent leading-tight focus:outline-none"
       :value="value"
       :class="{
         'border-red-500': errorClass,
-        'text-right': text_align === 'right'
+        'text-right': text_align === 'right',
+        'text-center': text_align === 'center'
       }"
       @input="updateValue"
       v-bind="$attrs"
