@@ -10,6 +10,7 @@
           Icome (total): {{ (totalIncomings - totalOutgoings).toFixed(2) }}
           {{ getBaseCurrency }}
         </div>
+        <div>Earnings (total): {{ totalEarnings }} {{ getBaseCurrency }}</div>
       </div>
       <div class="flex flex-col">
         <div>Hold (currently): {{ currentHold }} {{ getBaseCurrency }}</div>
@@ -57,6 +58,7 @@ import {
   D_GET_TOTAL_INCOMINGS,
   D_GET_CURRENT_HOLD,
   D_GET_PROBABLE_INCOME,
+  D_GET_TOTAL_EARNINGS,
   U_GET_BASE_CURRENCY,
   U_CHANGE_DEFAULT_CURRENCY
 } from '@/store/mutation-types.js'
@@ -68,6 +70,7 @@ export default {
       totalIncomings: D_GET_TOTAL_INCOMINGS,
       currentHold: D_GET_CURRENT_HOLD,
       probableIncome: D_GET_PROBABLE_INCOME,
+      totalEarnings: D_GET_TOTAL_EARNINGS,
       getBaseCurrency: U_GET_BASE_CURRENCY
     })
   },

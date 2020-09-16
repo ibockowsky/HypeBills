@@ -29,6 +29,7 @@ export const GET_TOTAL_OUTGOINGS = 'getTotalOutgoings'
 export const GET_TOTAL_INCOMINGS = 'getTotalIncomings'
 export const GET_CURRENT_HOLD = 'getCurrentHold'
 export const GET_PROBABLE_INCOME = 'getProbableIncome'
+export const GET_TOTAL_EARNINGS = 'getTotalEarnings'
 export const D_GET_DEALS = `${DEALS}${GET_DEALS}`
 export const D_ADD_DEAL = `${DEALS}${ADD_DEAL}`
 export const D_REMOVE_DEAL = `${DEALS}${REMOVE_DEAL}`
@@ -38,6 +39,7 @@ export const D_GET_TOTAL_OUTGOINGS = `${DEALS}${GET_TOTAL_OUTGOINGS}`
 export const D_GET_TOTAL_INCOMINGS = `${DEALS}${GET_TOTAL_INCOMINGS}`
 export const D_GET_CURRENT_HOLD = `${DEALS}${GET_CURRENT_HOLD}`
 export const D_GET_PROBABLE_INCOME = `${DEALS}${GET_PROBABLE_INCOME}`
+export const D_GET_TOTAL_EARNINGS = `${DEALS}${GET_TOTAL_EARNINGS}`
 
 export const SET_USER = 'SET_USER'
 export const SET_USER_DATA = 'SET_USER_DATA'

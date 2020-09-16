@@ -12,7 +12,9 @@ import {
   GET_TOTAL_INCOMINGS,
   GET_CURRENT_HOLD,
   GET_PROBABLE_INCOME,
-  U_GET_USER_ID
+  GET_TOTAL_EARNINGS,
+  U_GET_USER_ID,
+  U_GET_BASE_CURRENCY
 } from '@/store/mutation-types.js'
 export const namespaced = true
 
@@ -133,7 +135,7 @@ const getters = {
     const totalOutgoings = calcSumByCondition({
       array: state.deals,
       to_sum: 'retail',
-      currency: rootGetters['user/getBaseCurrency'],
+      currency: rootGetters[U_GET_BASE_CURRENCY],
       currencies: rootState.user.currencies
     })
     return totalOutgoings
@@ -144,7 +146,7 @@ const getters = {
       to_sum: 'payout',
       to_condition: 'status',
       condition: 'sold',
-      currency: rootGetters['user/getBaseCurrency'],
+      currency: rootGetters[U_GET_BASE_CURRENCY],
       currencies: rootState.user.currencies
     })
     return totalIncomings
@@ -155,7 +157,7 @@ const getters = {
       to_sum: 'retail',
       to_condition: 'status',
       condition: 'on hold',
-      currency: rootGetters['user/getBaseCurrency'],
+      currency: rootGetters[U_GET_BASE_CURRENCY],
       currencies: rootState.user.currencies
     })
     return currentHold
@@ -166,10 +168,29 @@ const getters = {
       to_sum: 'payout',
       to_condition: 'status',
       condition: 'on hold',
-      currency: rootGetters['user/getBaseCurrency'],
+      currency: rootGetters[U_GET_BASE_CURRENCY],
       currencies: rootState.user.currencies
     })
     return probableIncome
+  },
+  [GET_TOTAL_EARNINGS]: (state, getters, rootState, rootGetters) => {
+    const totalSoldPayout = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'payout',
+      to_condition: 'status',
+      condition: 'sold',
+      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currencies: rootState.user.currencies
+    })
+    const totalSoldRetail = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'retail',
+      to_condition: 'status',
+      condition: 'sold',
+      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currencies: rootState.user.currencies
+    })
+    return totalSoldPayout - totalSoldRetail
   }
 }
 
