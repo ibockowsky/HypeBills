@@ -1,17 +1,16 @@
-export const calcSumByCondition = (
+export const calcSumByCondition = ({
   array,
   to_sum,
-  to_condition = null,
-  condition = null,
-  currency = null,
-  currencies = null
-) => {
-  if (typeof array !== 'object' || typeof to_sum !== 'string') return 0
+  to_condition,
+  condition,
+  currency,
+  currencies
+}) => {
   if (array.length === 0) return 0
 
   let sum = 0
 
-  if (typeof condition === 'string' && typeof to_condition === 'string') {
+  if (condition !== undefined && to_condition !== undefined) {
     sum = array.reduce((prev, cur) => {
       if (cur[to_condition] === condition) {
         if (cur.currency !== currency) {

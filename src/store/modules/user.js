@@ -165,7 +165,7 @@ const actions = {
       .set({ base_currency: currency }, { merge: true })
       .then(() => {
         commit(CHANGE_CURRENCY, currency)
-        dispatch('getCurrencies')
+        dispatch(GET_CURRENCIES)
       })
       .catch(err => {
         dispatch(

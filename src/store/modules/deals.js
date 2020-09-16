@@ -11,7 +11,8 @@ import {
   GET_TOTAL_OUTGOINGS,
   GET_TOTAL_INCOMINGS,
   GET_CURRENT_HOLD,
-  GET_PROBABLE_INCOME
+  GET_PROBABLE_INCOME,
+  U_GET_USER_ID
 } from '@/store/mutation-types.js'
 export const namespaced = true
 
@@ -61,7 +62,7 @@ const actions = {
   },
   [GET_DEALS]: ({ commit, dispatch, rootGetters }) => {
     let tempArray = []
-    const uid = rootGetters['user/getUserId']
+    const uid = rootGetters[U_GET_USER_ID]
     fb.db
       .collection('deals')
       .where('uid', '==', uid)
@@ -129,47 +130,45 @@ const actions = {
 const getters = {
   [GET_DEAL]: state => id => state.deals.find(item => item.id === id),
   [GET_TOTAL_OUTGOINGS]: (state, getters, rootState, rootGetters) => {
-    const totalOutgoings = calcSumByCondition(
-      state.deals,
-      'retail',
-      null,
-      null,
-      rootGetters['user/getBaseCurrency'],
-      rootState.user.currencies
-    )
+    const totalOutgoings = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'retail',
+      currency: rootGetters['user/getBaseCurrency'],
+      currencies: rootState.user.currencies
+    })
     return totalOutgoings
   },
   [GET_TOTAL_INCOMINGS]: (state, getters, rootState, rootGetters) => {
-    const totalIncomings = calcSumByCondition(
-      state.deals,
-      'payout',
-      'status',
-      'sold',
-      rootGetters['user/getBaseCurrency'],
-      rootState.user.currencies
-    )
+    const totalIncomings = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'payout',
+      to_condition: 'status',
+      condition: 'sold',
+      currency: rootGetters['user/getBaseCurrency'],
+      currencies: rootState.user.currencies
+    })
     return totalIncomings
   },
   [GET_CURRENT_HOLD]: (state, getters, rootState, rootGetters) => {
-    const currentHold = calcSumByCondition(
-      state.deals,
-      'retail',
-      'status',
-      'on hold',
-      rootGetters['user/getBaseCurrency'],
-      rootState.user.currencies
-    )
+    const currentHold = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'retail',
+      to_condition: 'status',
+      condition: 'on hold',
+      currency: rootGetters['user/getBaseCurrency'],
+      currencies: rootState.user.currencies
+    })
     return currentHold
   },
   [GET_PROBABLE_INCOME]: (state, getters, rootState, rootGetters) => {
-    const probableIncome = calcSumByCondition(
-      state.deals,
-      'payout',
-      'status',
-      'on hold',
-      rootGetters['user/getBaseCurrency'],
-      rootState.user.currencies
-    )
+    const probableIncome = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'payout',
+      to_condition: 'status',
+      condition: 'on hold',
+      currency: rootGetters['user/getBaseCurrency'],
+      currencies: rootState.user.currencies
+    })
     return probableIncome
   }
 }
