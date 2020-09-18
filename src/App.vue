@@ -5,7 +5,6 @@
       <Summary v-if="isLoggedIn" />
       <router-view />
     </div>
-    <vue-confirm-dialog></vue-confirm-dialog>
     <div v-if="alerts.length > 0" class="absolute md:right-0 bottom-0">
       <Alert v-for="alert in alerts" :key="alert.id" :alert="alert" />
     </div>

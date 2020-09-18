@@ -1,5 +1,9 @@
 <template>
   <div class="px-2 sm:px-4 py-1 overflow-x-auto">
+    <BaseConfirmDialog
+      v-if="confirmDialog.open"
+      @callback="handleCallback"
+    ></BaseConfirmDialog>
     <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
       <table class="min-w-full leading-normal">
         <thead>
@@ -30,6 +34,8 @@
 <script>
 import TableRowDeals from '@/components/TableRowDeals.vue'
 import { D_REMOVE_DEAL } from '@/store/mutation-types.js'
+import { mapActions } from 'vuex'
+
 export default {
   name: 'TableDeals',
   components: {
@@ -53,29 +59,27 @@ export default {
       'where',
       'status',
       'options'
-    ]
+    ],
+    confirmDialog: { open: false, toDeleteID: null }
   }),
   methods: {
+    ...mapActions({
+      remove: D_REMOVE_DEAL
+    }),
     removeDeal(id) {
-      this.$confirm({
-        message: 'Are you sure?',
-        button: {
-          no: 'No',
-          yes: 'Yes'
-        },
-        callback: confirm => {
-          if (confirm) {
-            this.$store.dispatch(D_REMOVE_DEAL, id)
-          }
-        }
-      })
+      this.confirmDialog.open = true
+      this.confirmDialog.toDeleteID = id
     },
     editDeal(id) {
       this.$router.push(`deals/${id}`)
+    },
+    handleCallback(callback) {
+      if (callback) {
+        this.remove(this.confirmDialog.toDeleteID)
+      }
+      this.confirmDialog.open = false
+      this.confirmDialog.toDeleteID = null
     }
-    // selectDeal(e) {
-    //   console.log(e)
-    // }
   }
 }
 </script>
