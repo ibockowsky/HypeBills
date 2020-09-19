@@ -1,4 +1,4 @@
-# hypebills (WIP) (Vue 2)
+# hypebills (WIP)
 HypeBills is a web application for managing your deals, bills and much more!.
 
 ## Installation
