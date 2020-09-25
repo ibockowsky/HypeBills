@@ -1,7 +1,5 @@
 <template>
-  <div
-    class="mx-auto m-2 bg-gray-900 w-11/12 lg:w-3/4 shadow-md rounded p-1 min-h-full"
-  >
+  <div class="mx-auto m-2 bg-gray-900 w-11/12 shadow-md rounded p-1 min-h-full">
     <div class="flex justify-between px-4 vertical-allign">
       <span class="text-3xl text-white ">Bills</span>
       <button

@@ -10,7 +10,7 @@
   "dependencies": {
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
-    "firebase": "^7.17.2",
+    "firebase": "^7.21.1",
     "jw-paginate": "^1.0.4",
     "jw-vue-pagination": "^1.0.3",
     "moment": "^2.27.0",

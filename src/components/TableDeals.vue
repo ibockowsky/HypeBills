@@ -1,10 +1,10 @@
 <template>
-  <div class="px-2 sm:px-4 py-1 overflow-x-auto">
+  <div class="px-2 sm:px-4 py-1 overflow-x-scroll">
     <BaseConfirmDialog
       v-if="confirmDialog.open"
       @callback="handleCallback"
     ></BaseConfirmDialog>
-    <div class="inline-block min-w-full shadow rounded-lg overflow-hidden">
+    <div class="inline-block min-w-full shadow rounded-lg">
       <table class="min-w-full leading-normal">
         <thead>
           <tr>
