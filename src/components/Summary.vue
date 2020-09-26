@@ -1,9 +1,9 @@
 <template>
   <div class="mx-auto m-2 bg-gray-900 w-11/12 shadow-md rounded h-56">
     <div
-      class="flex flex-1 justify-between w-full text-lg font-semibold text-gray-200 px-2 py-3"
+      class="flex flex-col sm:flex-row flex-1 justify-between w-full text-md font-semibold text-gray-200 px-2 py-3"
     >
-      <div class="flex flex-col ">
+      <div class="flex flex-col">
         <div>Outgoings (total): {{ totalOutgoings }} {{ getBaseCurrency }}</div>
         <div>Incomings (total): {{ totalIncomings }} {{ getBaseCurrency }}</div>
         <div>

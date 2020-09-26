@@ -1,6 +1,6 @@
 <template>
   <div
-    class="fixed w-full bottom-0 z-20 md:px-4 md:pb-4 inset-0 flex items-center justify-center"
+    class="absolute w-full bottom-0 z-20 inset-0 flex items-center justify-center"
   >
     <div
       class="fixed w-full h-100 inset-0 overflow-hidden animated fadeIn faster"
@@ -209,6 +209,12 @@ export default {
         } else this.$emit('add-deal', payload)
       }
     }
+  },
+  mounted() {
+    document.documentElement.style.overflow = 'hidden'
+  },
+  destroyed() {
+    document.documentElement.style.overflow = 'auto'
   }
 }
 </script>

@@ -24,7 +24,9 @@ body {
   overflow-y: scroll;
 }
 
-
+.disable-scroll {
+  overflow: hidden;
+}
 
 .btn-grad {
   background: rgb(52,85,255);

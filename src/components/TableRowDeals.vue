@@ -71,7 +71,9 @@
         {{ rowData.where ? rowData.where : 'undefined' }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td
+      class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm text-center"
+    >
       <span
         class="relative inline-block px-3 py-1 text-gray-900 font-semibold capitalize leading-tight select-none"
       >

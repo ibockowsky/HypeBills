@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Navbar />
-    <div class="mx-auto w-full mt-20">
+    <div class="mx-auto w-full">
       <Summary v-if="isLoggedIn" />
       <router-view />
     </div>
