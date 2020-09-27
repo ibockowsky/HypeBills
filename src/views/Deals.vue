@@ -18,8 +18,10 @@
           <icon name="plus-circle" class="w-6 h-6"></icon>
         </button>
       </div>
+      <perfect-scrollbar class="h-128 mt-2">
+        <TableDeals v-if="pageOfDeals.length > 0" :tableData="pageOfDeals" />
+      </perfect-scrollbar>
 
-      <TableDeals v-if="pageOfDeals.length > 0" :tableData="pageOfDeals" />
       <BasePagination :items="deals" @changePage="onChangePage" />
     </div>
   </div>

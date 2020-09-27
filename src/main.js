@@ -7,8 +7,10 @@ import VIcon from 'vue-tailwind-icons'
 import VCalendar from 'v-calendar'
 import upperFirst from 'lodash/upperFirst'
 import camelCase from 'lodash/camelCase'
+import PerfectScrollbar from 'vue2-perfect-scrollbar'
 import '@/assets/css/tailwind.css'
 import '@/assets/css/style.scss'
+import 'vue2-perfect-scrollbar/dist/vue2-perfect-scrollbar.css'
 const fb = require('@/services/firebase.js')
 
 Vue.config.productionTip = false
@@ -19,8 +21,8 @@ Vue.use(VCalendar, {
 })
 Vue.use(VIcon)
 Vue.use(Vuelidate)
-
-//Globa
+Vue.use(PerfectScrollbar)
+//Global
 const requireComponent = require.context(
   './components/Base',
   false,

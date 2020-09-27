@@ -1,5 +1,5 @@
 <template>
-  <div class="px-2 sm:px-4 py-1 overflow-x-scroll">
+  <div class="px-2 sm:px-4 py-1 overflow-x-auto">
     <BaseConfirmDialog
       v-if="confirmDialog.open"
       @callback="handleCallback"

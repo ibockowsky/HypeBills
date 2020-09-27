@@ -31,7 +31,13 @@
 
 <script>
 export default {
-  name: 'BaseConfirmDialog'
+  name: 'BaseConfirmDialog',
+  mounted() {
+    document.body.classList.add('disable-scroll')
+  },
+  destroyed() {
+    document.body.classList.remove('disable-scroll')
+  }
 }
 </script>
 

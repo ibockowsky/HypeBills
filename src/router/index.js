@@ -50,13 +50,13 @@ const routes = [
         }
       }
     ]
+  },
+  {
+    path: '/bills',
+    name: 'Bills',
+    component: Bills,
+    meta: { requiresAuth: true }
   }
-  // {
-  //   path: '/bills',
-  //   name: 'Bills',
-  //   component: Bills,
-  //   meta: { requiresAuth: true }
-  // }
 ]
 
 const router = new VueRouter({
