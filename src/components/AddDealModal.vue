@@ -1,9 +1,9 @@
 <template>
   <div
-    class="absolute w-full min-h-screen bottom-0 z-20 inset-0 flex items-center justify-center"
+    class="absolute inset-0 m-auto flex justify-center items-center overflow-y-hidden"
   >
     <div
-      class="fixed w-full min-h-screen inset-0 bg-black opacity-50"
+      class="fixed w-full min-h-screen z-40 inset-0 bg-black opacity-50"
       @click.prevent="toggleAddModal"
     ></div>
     <div
@@ -18,10 +18,10 @@
             ><icon name="x" class="w-6 h-6"
           /></span>
         </div>
-        <div class="mt-2 h-128 sm:h-160 md:h-96 overflow-y-auto">
+        <div class="mt-2 h-96 md:h-112 overflow-y-auto">
           <form class="w-full max-w-lg">
-            <div class="flex flex-wrap mb-6">
-              <div class="w-full  px-3 mb-6">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full px-3 mb-3">
                 <BaseAutocompleteInput
                   label="Title"
                   v-model="$v.dealForm.title.$model"
@@ -31,8 +31,8 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap mb-6">
-              <div class="w-full md:w-3/4 px-3">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full md:w-3/4 px-3 mb-3">
                 <BaseInput
                   label="Size"
                   v-model="$v.dealForm.size.$model"
@@ -41,7 +41,7 @@
                   @blur="$v.dealForm.size.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/4 px-3">
+              <div class="w-full md:w-1/4 px-3 mb-3">
                 <BaseSelect
                   label="Status"
                   v-model="$v.dealForm.status.$model"
@@ -51,33 +51,26 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap mb-2">
-              <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full md:w-5/12 px-3 mb-3">
                 <BaseInput
                   label="Retail"
-                  v-model.number="$v.dealForm.retail.$model"
+                  v-model="$v.dealForm.retail.$model"
                   type="text"
                   :errorClass="$v.dealForm.retail.$error"
                   @blur="$v.dealForm.retail.$touch()"
                 />
               </div>
-              <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-5/12 px-3 mb-3">
                 <BaseInput
                   label="Payout"
-                  v-model.number="$v.dealForm.payout.$model"
+                  v-model="$v.dealForm.payout.$model"
                   type="text"
                   :errorClass="$v.dealForm.payout.$error"
                   @blur="$v.dealForm.payout.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/6 px-3 mb-6">
-                <!-- <BaseInput
-                      label="Currency"
-                      v-model="$v.dealForm.currency.$model"
-                      type="text"
-                      :errorClass="$v.dealForm.currency.$error"
-                      @blur="$v.dealForm.currency.$touch()"
-                    /> -->
+              <div class="w-full md:w-1/6 px-3 mb-3">
                 <BaseSelect
                   label="Currency"
                   v-model="$v.dealForm.currency.$model"
@@ -87,8 +80,8 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap mb-6">
-              <div class="w-full md:w-3/12 px-3 mb-6">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full md:w-4/12 px-3 mb-3">
                 <label class="block text-white text-sm font-bold mb-2">
                   Date
                 </label>
@@ -106,7 +99,7 @@
                   is-dark
                 />
               </div>
-              <div class="w-full md:w-2/12 px-3 mb-6">
+              <div class="w-full md:w-2/12 px-3 mb-3">
                 <BaseInput
                   label="Qty."
                   v-model.number="$v.qty.$model"
@@ -114,7 +107,7 @@
                   @blur="$v.qty.$touch()"
                 />
               </div>
-              <div class="w-full md:w-7/12 px-3 mb-6">
+              <div class="w-full md:w-6/12 px-3 mb-3">
                 <BaseInput
                   label="Where"
                   v-model="$v.dealForm.where.$model"
@@ -126,11 +119,13 @@
             </div>
           </form>
         </div>
-        <div class="mt-3 md:mt-0 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+        <div
+          class="flex flex-col-reverse md:flex-row-reverse text-right mt-6 md:-mt-10"
+        >
+          <span class="shadow-sm my-1 md:my-0 md:mx-1">
             <button
               type="button"
-              class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-600 focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+              class="w-full md:w-auto text-white bg-green-600 hover:bg-green-800 py-2 px-5 rounded"
               :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
               :disabled="$v.dealForm.$anyError"
               @click="addDeal(dealForm)"
@@ -138,10 +133,10 @@
               Add
             </button>
           </span>
-          <span class="flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+          <span class="shadow-sm my-1 md:my-0 md:mx-1">
             <button
               type="button"
-              class="inline-flex justify-center w-full rounded-md border border-gray-800 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-base leading-6 font-medium text-white shadow-sm  focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+              class="w-full md:w-auto text-white bg-gray-700 hover:bg-gray-800 py-2 px-5 rounded"
               @click="toggleAddModal"
             >
               Cancel
@@ -194,16 +189,39 @@ export default {
       this.$emit('toggle-modal')
     },
     addDeal(deal) {
-      const payload = { ...deal, uid: this.uid }
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        return
+      let retail_amount, payout_amount
+      const { retail, payout } = deal
+      if (!retail.includes(',') && !retail.includes('.')) {
+        retail_amount = parseInt(retail) * 100
       } else {
+        retail_amount = retail
+          .toString()
+          .replace(',', '')
+          .replace('.', '')
+      }
+      if (!payout.includes(',') && !payout.includes('.')) {
+        payout_amount = parseInt(payout) * 100
+      } else {
+        payout_amount = payout
+          .toString()
+          .replace(',', '')
+          .replace('.', '')
+      }
+      const payload = {
+        ...deal,
+        uid: this.uid,
+        retail: retail_amount,
+        payout: payout_amount
+      }
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
         if (this.qty > 1) {
           for (let i = 0; i < this.qty; i++) {
             this.$emit('add-deal', payload)
+            return
           }
-        } else this.$emit('add-deal', payload)
+        }
+        this.$emit('add-deal', payload)
       }
     }
   },

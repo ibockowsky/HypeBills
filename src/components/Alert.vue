@@ -7,7 +7,7 @@
     }"
   >
     <div class="absolute top-0 right-0 p-1">
-      <button class="rounded-full hover:bg-gray-600" @click="$emit('expired')">
+      <button class="rounded-full hover:bg-gray-600" @click="removeAlert">
         <icon name="x" class="w-4 h-4" />
       </button>
     </div>

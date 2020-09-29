@@ -160,7 +160,15 @@ const getters = {
       currency: rootGetters[U_GET_BASE_CURRENCY],
       currencies: rootState.user.currencies
     })
-    return currentHold
+    const currentTransit = calcSumByCondition({
+      array: state.deals,
+      to_sum: 'retail',
+      to_condition: 'status',
+      condition: 'in transit',
+      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currencies: rootState.user.currencies
+    })
+    return currentHold + currentTransit
   },
   [GET_PROBABLE_INCOME]: (state, getters, rootState, rootGetters) => {
     const probableIncome = calcSumByCondition({

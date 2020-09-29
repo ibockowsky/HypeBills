@@ -51,10 +51,10 @@ export default {
       getDeals: D_GET_DEALS,
       getBills: B_GET_BILLS
     })
-  },
-  mounted() {
-    document.body.classList.add('')
   }
+  // mounted() {
+  //   document.body.classList.add('')
+  // }
 }
 </script>
 

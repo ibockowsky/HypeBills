@@ -1,30 +1,27 @@
 <template>
   <div
-    class="fixed w-full bottom-0 z-20 md:px-4 md:pb-4 inset-0 flex items-center justify-center"
+    class="absolute inset-0 m-auto flex justify-center items-center overflow-y-hidden"
   >
     <div
-      class="fixed w-full h-100 inset-0 overflow-hidden animated fadeIn faster"
-      style="background: rgba(0,0,0,.8);"
+      class="fixed w-full min-h-screen z-40 inset-0 bg-black opacity-50"
       @click.prevent="toggleEditModal"
     ></div>
     <div
-      class="flex items-center justify-center md:border border-gray-800 shadow-lg bg-gray-900 w-full md:w-3/4 xl:w-2/5 sm:mx-auto rounded z-50"
+      class="fixed flex items-center justify-center md:border border-gray-800 shadow-lg bg-gray-900 w-full md:w-3/4 xl:w-2/5 sm:mx-auto rounded z-50"
     >
-      <div
-        class="py-4 text-left px-2 overflow-y-auto overflow-x-hidden max-h-screen sm:h-auto"
-      >
+      <div class="py-4 text-left px-2 overflow-hidden min-h-screen md:min-h-0">
         <div class="flex justify-between items-center pb-3">
-          <p class="text-2xl text-white font-bold">Add deal</p>
+          <p class="text-2xl text-white font-bold">Edit deal</p>
           <span
             class="text-gray-700 hover:text-gray-600"
             @click.prevent="toggleEditModal"
             ><icon name="x" class="w-6 h-6"
           /></span>
         </div>
-        <div class="mt-2">
+        <div class="mt-2 h-96 md:h-112 overflow-y-auto">
           <form class="w-full max-w-lg">
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full  px-3 mb-6 md:mb-0">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full px-3 mb-3">
                 <BaseAutocompleteInput
                   label="Title"
                   v-model="$v.dealForm.title.$model"
@@ -34,8 +31,8 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full md:w-3/4 px-3">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full md:w-3/4 px-3 mb-3">
                 <BaseInput
                   label="Size"
                   v-model="$v.dealForm.size.$model"
@@ -44,7 +41,7 @@
                   @blur="$v.dealForm.size.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/4 px-3">
+              <div class="w-full md:w-1/4 px-3 mb-3">
                 <BaseSelect
                   label="Status"
                   v-model="dealForm.status"
@@ -53,8 +50,8 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap -mx-3 mb-2">
-              <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full md:w-5/12 px-3 mb-3">
                 <BaseInput
                   label="Retail"
                   v-model="$v.dealForm.retail.$model"
@@ -63,7 +60,7 @@
                   @blur="$v.dealForm.retail.$touch()"
                 />
               </div>
-              <div class="w-full md:w-5/12 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-5/12 px-3 mb-3">
                 <BaseInput
                   label="Payout"
                   v-model="$v.dealForm.payout.$model"
@@ -72,14 +69,7 @@
                   @blur="$v.dealForm.payout.$touch()"
                 />
               </div>
-              <div class="w-full md:w-1/6 px-3 mb-6 md:mb-0">
-                <!-- <BaseInput
-                      label="Currency"
-                      v-model="$v.dealForm.currency.$model"
-                      type="text"
-                      :errorClass="$v.dealForm.currency.$error"
-                      @blur="$v.dealForm.currency.$touch()"
-                    /> -->
+              <div class="w-full md:w-1/6 px-3 mb-3">
                 <BaseSelect
                   label="Currency"
                   v-model="dealForm.currency"
@@ -87,8 +77,8 @@
                 />
               </div>
             </div>
-            <div class="flex flex-wrap -mx-3 mb-6">
-              <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
+            <div class="flex flex-wrap md:mb-3">
+              <div class="w-full md:w-1/3 px-3 mb-3">
                 <label class="block text-white text-sm font-bold mb-2">
                   Date
                 </label>
@@ -106,7 +96,7 @@
                   is-dark
                 />
               </div>
-              <div class="w-full md:w-3/4 px-3 mb-6 md:mb-0">
+              <div class="w-full md:w-2/3 px-3 mb-3">
                 <BaseInput
                   label="Where"
                   v-model="$v.dealForm.where.$model"
@@ -118,11 +108,13 @@
             </div>
           </form>
         </div>
-        <div class="px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-          <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
+        <div
+          class="flex flex-col md:flex-row-reverse text-right mt-6 md:-mt-10"
+        >
+          <span class="shadow-sm my-1 md:my-0 md:mx-1">
             <button
               type="button"
-              class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-yellow-700 text-base leading-6 font-medium text-white shadow-sm hover:bg-yellow-600 focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+              class="w-full md:w-auto text-white bg-yellow-600 hover:bg-yellow-900 py-2 px-5 rounded"
               :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
               :disabled="$v.dealForm.$anyError"
               @click="edit"
@@ -130,10 +122,10 @@
               Edit
             </button>
           </span>
-          <span class="flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
+          <span class="shadow-sm my-1 md:my-0 md:mx-1">
             <button
               type="button"
-              class="inline-flex justify-center w-full rounded-md border border-gray-800 px-4 py-2 bg-gray-800 hover:bg-gray-700 text-base leading-6 font-medium text-white shadow-sm  focus:outline-none transition ease-in-out duration-150 sm:text-sm sm:leading-5"
+              class="w-full md:w-auto text-white bg-gray-700 hover:bg-gray-800 py-2 px-5 rounded"
               @click="toggleEditModal"
             >
               Cancel
@@ -188,15 +180,43 @@ export default {
       this.$router.go(-1)
     },
     edit() {
-      this.$v.$touch()
-      if (this.$v.$invalid) {
-        return
+      let retail_amount, payout_amount
+      const { retail, payout } = this.dealForm
+      if (!retail.includes(',') && !retail.includes('.')) {
+        retail_amount = parseInt(retail) * 100
       } else {
-        this.updateDeal({ ...this.dealForm, id: this.dealID }).then(() => {
+        retail_amount = retail
+          .toString()
+          .replace(',', '')
+          .replace('.', '')
+      }
+      if (!payout.includes(',') && !payout.includes('.')) {
+        payout_amount = parseInt(payout) * 100
+      } else {
+        payout_amount = payout
+          .toString()
+          .replace(',', '')
+          .replace('.', '')
+      }
+      const payload = {
+        ...this.dealForm,
+        retail: retail_amount,
+        payout: payout_amount,
+        id: this.dealID
+      }
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
+        this.updateDeal(payload).then(() => {
           this.$router.go(-1)
         })
       }
     }
+  },
+  mounted() {
+    document.body.classList.add('disable-scroll')
+  },
+  destroyed() {
+    document.body.classList.remove('disable-scroll')
   }
 }
 </script>
