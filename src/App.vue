@@ -13,12 +13,6 @@
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex'
-import {
-  U_GET_USER_DATA,
-  B_GET_BILLS,
-  D_GET_DEALS,
-  U_IS_LOGGED_IN
-} from '@/store/mutation-types.js'
 
 import Navbar from '@/components/Navbar.vue'
 import Alert from '@/components/Alert.vue'
@@ -35,11 +29,12 @@ export default {
       this.getUserData()
       this.getDeals()
       this.getBills()
+      this.getCurrencies()
     }
   },
   computed: {
     ...mapGetters({
-      isLoggedIn: U_IS_LOGGED_IN
+      isLoggedIn: 'user/isLoggedIn'
     }),
     ...mapState({
       alerts: state => state.alerts.alerts
@@ -47,9 +42,10 @@ export default {
   },
   methods: {
     ...mapActions({
-      getUserData: U_GET_USER_DATA,
-      getDeals: D_GET_DEALS,
-      getBills: B_GET_BILLS
+      getUserData: 'user/getUserData',
+      getCurrencies: 'user/getCurrencies',
+      getDeals: 'deals/getDeals',
+      getBills: 'bills/getBills'
     })
   }
   // mounted() {

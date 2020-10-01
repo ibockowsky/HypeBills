@@ -1,22 +1,11 @@
 import router from '@/router'
 import axios from 'axios'
 import {
-  A_ADD_ALERT,
-  GET_USER_DATA,
-  LOGIN_USER,
-  REGISTER_USER,
-  LOGOUT_USER,
   SET_USER,
   SET_USER_DATA,
   CLEAR_USER_DATA,
   SET_CURRENCIES,
-  CHANGE_CURRENCY,
-  GET_CURRENCIES,
-  CHANGE_DEFAULT_CURRENCY,
-  GET_USER_ID,
-  IS_LOGGED_IN,
-  GET_BASE_CURRENCY,
-  D_GET_DEALS
+  CHANGE_CURRENCY
 } from '@/store/mutation-types.js'
 const fb = require('@/services/firebase.js')
 
@@ -40,15 +29,14 @@ const mutations = {
     (state.currentUserData.base_currency = currency)
 }
 const actions = {
-  [REGISTER_USER]: ({ commit, dispatch }, credentials) => {
+  registerUser: ({ commit, dispatch }, credentials) => {
     fb.auth
       .createUserWithEmailAndPassword(credentials.email, credentials.password)
       .then(async user => {
         await commit(SET_USER, user)
-        await dispatch(GET_USER_DATA, user.user.uid)
-        await dispatch(D_GET_DEALS, {}, { root: true })
+        await dispatch('getUserData', user.user.uid)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Registered!', type: 'success' },
           { root: true }
         )
@@ -61,7 +49,7 @@ const actions = {
           })
           .catch(err => {
             dispatch(
-              A_ADD_ALERT,
+              'addAlert',
               { title: 'Error', content: err.message, type: 'error' },
               { root: true }
             )
@@ -70,21 +58,20 @@ const actions = {
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [LOGIN_USER]: ({ commit, dispatch }, credentials) => {
+  loginUser: ({ commit, dispatch }, credentials) => {
     fb.auth
       .signInWithEmailAndPassword(credentials.email, credentials.password)
       .then(async user => {
         await commit(SET_USER, user)
-        await dispatch(GET_USER_DATA, user.user.uid)
-        await dispatch(D_GET_DEALS, {}, { root: true })
+        await dispatch('getUserData', user.user.uid)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Logged in!', type: 'success' },
           { root: true }
         )
@@ -92,13 +79,13 @@ const actions = {
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [GET_USER_DATA]: ({ state, commit, dispatch }) => {
+  getUserData: ({ state, commit, dispatch }) => {
     fb.db
       .collection('users')
       .where('uid', '==', state.currentUser.uid)
@@ -112,37 +99,41 @@ const actions = {
           }
           commit(SET_USER_DATA, userObject)
           dispatch('getCurrencies')
+          dispatch('bills/getBills', {}, { root: true })
+          dispatch('deals/getDeals', {}, { root: true })
         })
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [LOGOUT_USER]: ({ commit, dispatch }) => {
+  logoutUser: ({ commit, dispatch }) => {
     fb.auth
       .signOut()
       .then(() => {
         commit(CLEAR_USER_DATA)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Logged out!', type: 'success' },
           { root: true }
         )
+        dispatch('deals/resetOnUserLogout', {}, { root: true })
+        dispatch('bills/resetOnUserLogout', {}, { root: true })
         router.push('/login')
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [GET_CURRENCIES]: ({ state, commit, dispatch }) => {
+  getCurrencies: ({ state, commit, dispatch }) => {
     axios
       .get(
         `https://api.exchangerate.host/latest?base=${state.currentUserData.base_currency}`
@@ -152,13 +143,13 @@ const actions = {
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [CHANGE_DEFAULT_CURRENCY]: ({ state, commit, dispatch }, currency) => {
+  changeDefaultCurrency: ({ state, commit, dispatch }, currency) => {
     fb.db
       .collection('users')
       .doc(state.currentUserData.id)
@@ -169,7 +160,7 @@ const actions = {
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
@@ -177,9 +168,9 @@ const actions = {
   }
 }
 const getters = {
-  [GET_USER_ID]: state => state.currentUser.uid,
-  [IS_LOGGED_IN]: state => !!state.currentUser,
-  [GET_BASE_CURRENCY]: state => state.currentUserData.base_currency
+  getUserId: state => state.currentUser.uid,
+  isLoggedIn: state => !!state.currentUser,
+  getBaseCurrency: state => state.currentUserData.base_currency
 }
 
 export { state, mutations, actions, getters }

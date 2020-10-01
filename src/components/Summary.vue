@@ -3,7 +3,8 @@
     <div class="flex flex-row justify-between text-gray-200">
       <div class="px-3 py-1">
         <span class="font-semibold">Total outgoing:</span>
-        {{ totalOutgoings }} {{ currencySign(getBaseCurrency) }}
+        {{ totalOutgoings }}
+        {{ currencySign(getBaseCurrency) }}
       </div>
       <div class="px-3 py-1">
         <span class="font-semibold">Hold:</span>
@@ -15,26 +16,17 @@
 
 <script>
 import { mapGetters, mapActions } from 'vuex'
-import {
-  D_GET_TOTAL_OUTGOINGS,
-  D_GET_TOTAL_INCOMINGS,
-  D_GET_CURRENT_HOLD,
-  D_GET_PROBABLE_INCOME,
-  D_GET_TOTAL_EARNINGS,
-  U_GET_BASE_CURRENCY,
-  U_CHANGE_DEFAULT_CURRENCY
-} from '@/store/mutation-types.js'
-import currencySign from '@/mixins/currencySign.js'
+import currencySign from '@/helpers/currencySign.js'
 export default {
   name: 'Summary',
   computed: {
     ...mapGetters({
-      totalOutgoings: D_GET_TOTAL_OUTGOINGS,
-      totalIncomings: D_GET_TOTAL_INCOMINGS,
-      currentHold: D_GET_CURRENT_HOLD,
-      probableIncome: D_GET_PROBABLE_INCOME,
-      totalEarnings: D_GET_TOTAL_EARNINGS,
-      getBaseCurrency: U_GET_BASE_CURRENCY
+      totalOutgoings: 'deals/getTotalOutgoings',
+      totalIncomings: 'deals/getTotalIncomings',
+      currentHold: 'deals/getCurrentHold',
+      probableIncome: 'deals/getProbableIncome',
+      totalEarnings: 'deals/getTotalEarnings',
+      getBaseCurrency: 'user/getBaseCurrency'
     })
   },
   data: () => ({
@@ -43,7 +35,7 @@ export default {
   }),
   methods: {
     ...mapActions({
-      changeDefaultCurrency: U_CHANGE_DEFAULT_CURRENCY
+      changeDefaultCurrency: 'user/changeDefaultCurrency'
     }),
     changeCurrency() {
       this.changeDefaultCurrency(this.currency)

@@ -88,13 +88,11 @@
 </template>
 
 <script>
-import { currencySign } from '@/mixins/currencySign.js'
+import { currencySign } from '@/helpers/calcHelpers.js'
 import { mapActions } from 'vuex'
-import { B_REMOVE_BILL, B_ADD_ITEM_TO_BILL } from '@/store/mutation-types.js'
 
 export default {
   name: 'Bills',
-  mixins: [currencySign],
   props: {
     bill: {
       type: Object,
@@ -111,8 +109,8 @@ export default {
   }),
   methods: {
     ...mapActions({
-      addItemToBill: B_ADD_ITEM_TO_BILL,
-      removeBill: B_REMOVE_BILL
+      addItemToBill: 'bills/addItemToBill',
+      removeBill: 'bills/removeBill'
     }),
     addItem() {
       if (this.item_form)

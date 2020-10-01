@@ -45,7 +45,7 @@
                 <BaseSelect
                   label="Status"
                   v-model="$v.dealForm.status.$model"
-                  :options="['unknown', 'on hold', 'sold', 'in transit']"
+                  :options="globals.dealStatuses"
                   :errorClass="$v.dealForm.status.$error"
                   @blur="$v.dealForm.status.$touch()"
                 />
@@ -74,7 +74,7 @@
                 <BaseSelect
                   label="Currency"
                   v-model="$v.dealForm.currency.$model"
-                  :options="['PLN', 'EUR', 'USD', 'GBP']"
+                  :options="globals.dealCurrencies"
                   :errorClass="$v.dealForm.currency.$error"
                   @blur="$v.dealForm.currency.$touch()"
                 />
@@ -151,6 +151,9 @@
 <script>
 import { mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
+import { parseToAmount } from '@/helpers/calcHelpers.js'
+import { isMoneyType } from '@/helpers/vuelidateHelpers.js'
+import * as globals from '@/helpers/globalConsts.js'
 
 export default {
   name: 'AddDealModal',
@@ -170,14 +173,15 @@ export default {
       where: '',
       status: ''
     },
-    qty: 1
+    qty: 1,
+    globals
   }),
   validations: {
     dealForm: {
       title: { required },
       size: {},
-      retail: { required },
-      payout: {},
+      retail: { required, isMoneyType },
+      payout: { isMoneyType },
       currency: { required },
       where: {},
       status: { required }
@@ -189,29 +193,12 @@ export default {
       this.$emit('toggle-modal')
     },
     addDeal(deal) {
-      let retail_amount, payout_amount
       const { retail, payout } = deal
-      if (!retail.includes(',') && !retail.includes('.')) {
-        retail_amount = parseInt(retail) * 100
-      } else {
-        retail_amount = retail
-          .toString()
-          .replace(',', '')
-          .replace('.', '')
-      }
-      if (!payout.includes(',') && !payout.includes('.')) {
-        payout_amount = parseInt(payout) * 100
-      } else {
-        payout_amount = payout
-          .toString()
-          .replace(',', '')
-          .replace('.', '')
-      }
+
+      console.log(retail, payout)
       const payload = {
         ...deal,
-        uid: this.uid,
-        retail: retail_amount,
-        payout: payout_amount
+        uid: this.uid
       }
       this.$v.$touch()
       if (!this.$v.$invalid) {

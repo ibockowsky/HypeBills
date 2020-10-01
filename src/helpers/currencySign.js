@@ -19,6 +19,7 @@ export const currencySign = currency_name => {
   if (currency_symbols[currency_name] !== undefined) {
     return currency_symbols[currency_name]
   }
+  return ''
 }
 
 export default { currencySign }

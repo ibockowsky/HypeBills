@@ -7,7 +7,10 @@
     }"
   >
     <div class="absolute top-0 right-0 p-1">
-      <button class="rounded-full hover:bg-gray-600" @click="removeAlert">
+      <button
+        class="rounded-full hover:bg-gray-600"
+        @click="removeAlert(alert)"
+      >
         <icon name="x" class="w-4 h-4" />
       </button>
     </div>
@@ -18,7 +21,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { A_REMOVE_ALERT } from '@/store/mutation-types.js'
 
 export default {
   name: 'Alert',
@@ -29,12 +31,15 @@ export default {
     }
   },
   created() {
-    setTimeout(() => this.removeAlert(this.alert), 3000)
+    this.timeout = setTimeout(() => this.removeAlert(this.alert), 3000)
   },
   methods: {
     ...mapActions({
-      removeAlert: A_REMOVE_ALERT
+      removeAlert: 'removeAlert'
     })
+  },
+  destroyed() {
+    clearTimeout(this.timeout)
   }
 }
 </script>

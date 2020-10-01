@@ -33,7 +33,6 @@
 
 <script>
 import TableRowDeals from '@/components/TableRowDeals.vue'
-import { D_REMOVE_DEAL } from '@/store/mutation-types.js'
 import { mapActions } from 'vuex'
 
 export default {
@@ -64,7 +63,7 @@ export default {
   }),
   methods: {
     ...mapActions({
-      remove: D_REMOVE_DEAL
+      remove: 'deals/removeDeal'
     }),
     removeDeal(id) {
       this.confirmDialog.open = true

@@ -50,7 +50,6 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { U_LOGIN_USER } from '@/store/mutation-types.js'
 import { required, email, strongPassword } from 'vuelidate/lib/validators'
 
 export default {
@@ -82,7 +81,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      loginUser: U_LOGIN_USER
+      loginUser: 'user/loginUser'
     }),
     login() {
       if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {

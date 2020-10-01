@@ -13,7 +13,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { U_IS_LOGGED_IN, U_GET_USER_ID } from '@/store/mutation-types.js'
 
 export default {
   name: 'Home',
@@ -23,8 +22,8 @@ export default {
       userData: state => state.user.currentUserData
     }),
     ...mapGetters({
-      isLoggedIn: U_IS_LOGGED_IN,
-      getUserId: U_GET_USER_ID
+      isLoggedIn: 'user/isLoggedIn',
+      getUserId: 'user/isLoggedIn'
     })
   }
 }

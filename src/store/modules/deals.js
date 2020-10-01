@@ -1,20 +1,10 @@
 const fb = require('@/services/firebase.js')
-import { calcSumByCondition } from '@/mixins/calcHelper.js'
+import { calcSumByCondition } from '@/helpers/calcHelpers.js'
 import {
-  A_ADD_ALERT,
-  GET_DEALS,
   ADD_DEAL,
   REMOVE_DEAL,
   UPDATE_DEAL,
-  SET_DEALS,
-  GET_DEAL,
-  GET_TOTAL_OUTGOINGS,
-  GET_TOTAL_INCOMINGS,
-  GET_CURRENT_HOLD,
-  GET_PROBABLE_INCOME,
-  GET_TOTAL_EARNINGS,
-  U_GET_USER_ID,
-  U_GET_BASE_CURRENCY
+  SET_DEALS
 } from '@/store/mutation-types.js'
 export const namespaced = true
 
@@ -42,29 +32,29 @@ const mutations = {
 }
 
 const actions = {
-  [ADD_DEAL]: ({ commit, dispatch }, deal) => {
+  addDeal: ({ commit, dispatch }, deal) => {
     fb.db
       .collection('deals')
       .add(deal)
       .then(docRef => {
         commit(ADD_DEAL, { ...deal, id: docRef.id })
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Added!', type: 'success' },
           { root: true }
         )
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [GET_DEALS]: ({ commit, dispatch, rootGetters }) => {
+  getDeals: ({ commit, dispatch, rootGetters }) => {
     let tempArray = []
-    const uid = rootGetters[U_GET_USER_ID]
+    const uid = rootGetters['user/getUserId']
     fb.db
       .collection('deals')
       .where('uid', '==', uid)
@@ -79,13 +69,13 @@ const actions = {
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [REMOVE_DEAL]: ({ commit, dispatch }, id) => {
+  removeDeal: ({ commit, dispatch }, id) => {
     fb.db
       .collection('deals')
       .doc(id)
@@ -93,20 +83,20 @@ const actions = {
       .then(() => {
         commit(REMOVE_DEAL, id)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Removed!', type: 'success' },
           { root: true }
         )
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [UPDATE_DEAL]: ({ commit, dispatch }, deal) => {
+  updateDeal: ({ commit, dispatch }, deal) => {
     fb.db
       .collection('deals')
       .doc(deal.id)
@@ -114,50 +104,55 @@ const actions = {
       .then(() => {
         commit(UPDATE_DEAL, deal)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Edited!', type: 'success' },
           { root: true }
         )
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
+  },
+  resetOnUserLogout: ({ commit }) => {
+    commit(SET_DEALS, [])
   }
 }
 
 const getters = {
-  [GET_DEAL]: state => id => state.deals.find(item => item.id === id),
-  [GET_TOTAL_OUTGOINGS]: (state, getters, rootState, rootGetters) => {
+  getDeal: state => id => state.deals.find(item => item.id === id),
+  getTotalOutgoings: (state, getters, rootState, rootGetters) => {
     const totalOutgoings = calcSumByCondition({
       array: state.deals,
       to_sum: 'retail',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
-    return totalOutgoings
+    if (typeof totalOutgoings === 'object')
+      return totalOutgoings.toFormat('0.00')
   },
-  [GET_TOTAL_INCOMINGS]: (state, getters, rootState, rootGetters) => {
+  getTotalIncomings: (state, getters, rootState, rootGetters) => {
     const totalIncomings = calcSumByCondition({
       array: state.deals,
       to_sum: 'payout',
       to_condition: 'status',
       condition: 'sold',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
-    return totalIncomings
+    if (typeof totalIncomings === 'object')
+      return totalIncomings.toFormat('0.00')
   },
-  [GET_CURRENT_HOLD]: (state, getters, rootState, rootGetters) => {
+  getCurrentHold: (state, getters, rootState, rootGetters) => {
     const currentHold = calcSumByCondition({
       array: state.deals,
       to_sum: 'retail',
       to_condition: 'status',
       condition: 'on hold',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
     const currentTransit = calcSumByCondition({
@@ -165,29 +160,31 @@ const getters = {
       to_sum: 'retail',
       to_condition: 'status',
       condition: 'in transit',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
-    return currentHold + currentTransit
+    if (typeof currentHold === 'object' && typeof currentTransit === 'object')
+      return currentHold.add(currentTransit).toFormat('0.00')
   },
-  [GET_PROBABLE_INCOME]: (state, getters, rootState, rootGetters) => {
+  getProbableIncome: (state, getters, rootState, rootGetters) => {
     const probableIncome = calcSumByCondition({
       array: state.deals,
       to_sum: 'payout',
       to_condition: 'status',
       condition: 'on hold',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
-    return probableIncome
+    if (typeof probableIncome === 'object')
+      return probableIncome.toFormat('0.00')
   },
-  [GET_TOTAL_EARNINGS]: (state, getters, rootState, rootGetters) => {
+  getTotalEarnings: (state, getters, rootState, rootGetters) => {
     const totalSoldPayout = calcSumByCondition({
       array: state.deals,
       to_sum: 'payout',
       to_condition: 'status',
       condition: 'sold',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
     const totalSoldRetail = calcSumByCondition({
@@ -195,10 +192,14 @@ const getters = {
       to_sum: 'retail',
       to_condition: 'status',
       condition: 'sold',
-      currency: rootGetters[U_GET_BASE_CURRENCY],
+      currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
-    return totalSoldPayout - totalSoldRetail
+    if (
+      typeof totalSoldPayout === 'object' &&
+      typeof totalSoldRetail === 'object'
+    )
+      return totalSoldPayout.subtract(totalSoldRetail)
   }
 }
 

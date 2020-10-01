@@ -1,13 +1,9 @@
 import { uuid } from 'vue-uuid'
 import {
-  A_ADD_ALERT,
-  GET_BILLS,
   SET_BILLS,
   ADD_BILL,
   REMOVE_BILL,
-  UPDATE_BILL,
-  ADD_ITEM_TO_BILL,
-  U_GET_USER_ID
+  UPDATE_BILL
 } from '@/store/mutation-types.js'
 import * as _ from 'lodash'
 
@@ -39,9 +35,9 @@ const mutations = {
 }
 
 const actions = {
-  [GET_BILLS]: ({ commit, dispatch, rootGetters }) => {
+  getBills: ({ commit, dispatch, rootGetters }) => {
     let tempArray = []
-    const uid = rootGetters[U_GET_USER_ID]
+    const uid = rootGetters['user/getUserId']
     fb.db
       .collection('bills')
       .where('uid', '==', uid)
@@ -55,33 +51,33 @@ const actions = {
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [ADD_BILL]: ({ commit, dispatch }, bill) => {
+  addBill: ({ commit, dispatch }, bill) => {
     fb.db
       .collection('bills')
       .add(bill)
       .then(docRef => {
         commit(ADD_BILL, { ...bill, id: docRef.id })
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Added!', type: 'success' },
           { root: true }
         )
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [REMOVE_BILL]: ({ commit, dispatch }, id) => {
+  removeBill: ({ commit, dispatch }, id) => {
     fb.db
       .collection('bills')
       .doc(id)
@@ -89,20 +85,20 @@ const actions = {
       .then(() => {
         commit(REMOVE_BILL, id)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Removed!', type: 'success' },
           { root: true }
         )
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
   },
-  [ADD_ITEM_TO_BILL]: ({ commit, dispatch }, payload) => {
+  addItemToBill: ({ commit, dispatch }, payload) => {
     const { bill, item } = payload
     const updated_bill = _.cloneDeep(bill)
     updated_bill.items.push({ ...item, id: uuid.v4() })
@@ -113,18 +109,21 @@ const actions = {
       .then(() => {
         commit(UPDATE_BILL, updated_bill)
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { content: 'Item added!', type: 'success' },
           { root: true }
         )
       })
       .catch(err => {
         dispatch(
-          A_ADD_ALERT,
+          'addAlert',
           { title: 'Error', content: err.message, type: 'error' },
           { root: true }
         )
       })
+  },
+  resetOnUserLogout: ({ commit }) => {
+    commit(SET_BILLS, [])
   }
 }
 

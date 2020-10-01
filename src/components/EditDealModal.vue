@@ -45,7 +45,7 @@
                 <BaseSelect
                   label="Status"
                   v-model="dealForm.status"
-                  :options="['unknown', 'on hold', 'sold', 'in transit']"
+                  :options="globals.dealStatuses"
                   :errorClass="dealForm.status"
                 />
               </div>
@@ -73,7 +73,7 @@
                 <BaseSelect
                   label="Currency"
                   v-model="dealForm.currency"
-                  :options="['PLN', 'EUR', 'USD', 'GBP']"
+                  :options="globals.dealCurrencies"
                 />
               </div>
             </div>
@@ -140,7 +140,10 @@
 <script>
 import { required } from 'vuelidate/lib/validators'
 import { mapGetters, mapActions } from 'vuex'
-import { D_GET_DEAL, D_UPDATE_DEAL } from '@/store/mutation-types.js'
+import { parseToAmount } from '@/helpers/calcHelpers.js'
+import { isMoneyType } from '@/helpers/vuelidateHelpers.js'
+import * as globals from '@/helpers/globalConsts.js'
+
 export default {
   name: 'EditDealModal',
   props: {
@@ -151,13 +154,13 @@ export default {
   },
   computed: {
     ...mapGetters({
-      getDeal: D_GET_DEAL
+      getDeal: 'deals/getDeal'
     }),
     deal() {
       return this.getDeal(this.dealID)
     }
   },
-  data: () => ({ dealForm: null }),
+  data: () => ({ dealForm: null, globals }),
   created() {
     const dealDate =
       this.deal.date instanceof Date ? this.deal.date : this.deal.date.toDate()
@@ -167,41 +170,21 @@ export default {
     dealForm: {
       title: { required },
       size: {},
-      retail: { required },
-      payout: {},
+      retail: { required, isMoneyType },
+      payout: { isMoneyType },
       where: {}
     }
   },
   methods: {
     ...mapActions({
-      updateDeal: D_UPDATE_DEAL
+      updateDeal: 'deals/updateDeal'
     }),
     toggleEditModal() {
       this.$router.go(-1)
     },
     edit() {
-      let retail_amount, payout_amount
-      const { retail, payout } = this.dealForm
-      if (!retail.includes(',') && !retail.includes('.')) {
-        retail_amount = parseInt(retail) * 100
-      } else {
-        retail_amount = retail
-          .toString()
-          .replace(',', '')
-          .replace('.', '')
-      }
-      if (!payout.includes(',') && !payout.includes('.')) {
-        payout_amount = parseInt(payout) * 100
-      } else {
-        payout_amount = payout
-          .toString()
-          .replace(',', '')
-          .replace('.', '')
-      }
       const payload = {
         ...this.dealForm,
-        retail: retail_amount,
-        payout: payout_amount,
         id: this.dealID
       }
       this.$v.$touch()

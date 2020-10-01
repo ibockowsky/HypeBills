@@ -104,7 +104,19 @@ export default {
     handleInput(event) {
       this.findItems(event.target.value)
       this.$emit('input', event.target.value)
+    },
+    handleClickOutside(event) {
+      if (!this.$el.contains(event.target)) {
+        this.results = []
+        this.open = false
+      }
     }
+  },
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside)
+  },
+  destroyed() {
+    document.removeEventListener('click', this.handleClickOutside)
   }
 }
 </script>

@@ -75,14 +75,8 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { U_REGISTER_USER } from '@/store/mutation-types.js'
-import {
-  required,
-  email,
-  minLength,
-  strongPassword,
-  sameAs
-} from 'vuelidate/lib/validators'
+import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
+import { isStrongPassword } from '@/helpers/vuelidateHelpers.js'
 export default {
   name: 'Register',
   data() {
@@ -102,14 +96,7 @@ export default {
       username: { required, minLength: minLength(2) },
       password: {
         required,
-        strongPassword(password) {
-          return (
-            /[a-z]/.test(password) && //checks for a-z
-            /[0-9]/.test(password) && //checks for 0-9
-            /\W|_/.test(password) && //checks for special char
-            password.length >= 8
-          )
-        }
+        isStrongPassword
       },
       confirmedPassword: {
         required,
@@ -119,7 +106,7 @@ export default {
   },
   methods: {
     ...mapActions({
-      registerUser: U_REGISTER_USER
+      registerUser: 'user/registerUser'
     }),
     register() {
       if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {

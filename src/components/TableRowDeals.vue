@@ -24,11 +24,7 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.retail }"
       >
-        {{
-          rowData.retail
-            ? `${rowData.retail} ${currencySign(rowData.currency)}`
-            : ''
-        }}
+        {{ retail }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -36,11 +32,7 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.payout }"
       >
-        {{
-          rowData.payout
-            ? `${rowData.payout} ${currencySign(rowData.currency)}`
-            : ''
-        }}
+        {{ payout }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -56,11 +48,7 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.date }"
       >
-        {{
-          rowData.date instanceof Date
-            ? rowData.date.toLocaleDateString()
-            : rowData.date.toDate().toLocaleDateString()
-        }}
+        {{ formatedDate }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -104,7 +92,6 @@
           @click="removeDeal"
         >
           <icon name="trash" class="w-5 h-5" />
-          {{ retail }}
         </button>
       </div>
     </td>
@@ -113,7 +100,8 @@
 
 <script>
 import Dinero from 'dinero.js'
-import currencySign from '@/mixins/currencySign.js'
+import currencySign from '@/helpers/currencySign.js'
+import { parseToAmount } from '@/helpers/calcHelpers.js'
 
 export default {
   name: 'TableRowDeals',
@@ -135,14 +123,37 @@ export default {
   computed: {
     retail() {
       const { retail, currency } = this.rowData
-      const intRetail = parseInt(
-        retail
-          .toString()
-          .replace(',', '')
-          .replace('.', '')
-      )
 
-      return intRetail
+      const moneyTypeRetail = Dinero({
+        amount: parseToAmount(retail),
+        currency
+      }).toFormat('0.00')
+
+      const rv = `${moneyTypeRetail} ${this.currencySign(currency)}`
+
+      return rv
+    },
+    payout() {
+      const { payout, currency } = this.rowData
+
+      const moneyTypePayout = Dinero({
+        amount: parseToAmount(payout),
+        currency
+      }).toFormat('0.00')
+
+      const rv = `${moneyTypePayout} ${this.currencySign(currency)}`
+
+      return rv
+    },
+    formatedDate() {
+      const { date } = this.rowData
+
+      const rv =
+        date instanceof Date
+          ? date.toLocaleDateString()
+          : date.toDate().toLocaleDateString()
+
+      return rv
     }
   }
 }
