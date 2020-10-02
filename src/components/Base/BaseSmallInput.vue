@@ -16,21 +16,33 @@
 </template>
 
 <script>
-import { formFieldMixin } from '@/mixins/formFieldMixin'
 export default {
   name: 'BaseSmallInput',
+  inheritAttrs: false,
   props: {
     text_align: {
       type: String
-    }
+    },
+    label: {
+      type: String,
+      default: ''
+    },
+    errorClass: {
+      type: Boolean
+    },
+    value: [String, Number]
   },
-  mixins: [formFieldMixin],
   computed: {
     listeners() {
       return {
         ...this.$listeners,
         input: this.updateValue
       }
+    }
+  },
+  methods: {
+    updateValue(event) {
+      this.$emit('input', event.target.value)
     }
   }
 }

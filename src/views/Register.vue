@@ -2,64 +2,47 @@
   <div class="home mx-auto bg-gray-900 w-11/12 md:w-2/5 shadow-md rounded">
     <div class="w-full max-w-xs mx-auto">
       <div class="px-8 pt-6 pb-8 mb-4" @keyup.enter="register">
-        <BaseInputError v-if="alert.length" :message="alert" />
+        <div class="h-6 text-red-500 text-xs">
+          <span v-if="alert">{{ errorInputMessages.formError }}</span>
+        </div>
         <div class="mb-4">
           <BaseInput
             label="Name"
-            v-model="$v.userForm.username.$model"
-            :errorClass="$v.userForm.username.$error"
             type="text"
             placeholder="John Doe"
-          />
-          <BaseInputError
-            v-if="$v.userForm.username.$error"
-            message="Username must contain more than 2 chars"
+            v-model="$v.userForm.username.$model"
+            :errorClass="$v.userForm.username.$error"
+            :errorContent="errorInputMessages.empty"
           />
         </div>
         <div class="mb-4">
           <BaseInput
             label="E-mail"
-            v-model="$v.userForm.email.$model"
-            :errorClass="$v.userForm.email.$error"
             type="text"
             placeholder="example@example.com"
-          />
-          <BaseInputError
-            v-if="$v.userForm.email.$error"
-            message="Please enter a valid email."
+            v-model="$v.userForm.email.$model"
+            :errorClass="$v.userForm.email.$error"
+            :errorContent="errorInputMessages.notEmail"
           />
         </div>
         <div class="mb-6">
           <BaseInput
             label="Password"
-            v-model="$v.userForm.password.$model"
             type="password"
             placeholder="******************"
+            v-model="$v.userForm.password.$model"
+            :errorClass="$v.userForm.password.$error"
+            :errorContent="errorInputMessages.lowPassword"
           />
-          <template v-if="$v.userForm.password.$error">
-            <BaseInputError
-              v-if="!$v.userForm.password.required"
-              message="Please enter a valid password."
-            />
-            <BaseInputError
-              v-if="!$v.userForm.password.strongPassword"
-              message="Password must contain 8 chars, letters, numbers and special chars."
-            />
-          </template>
         </div>
         <div class="mb-6">
           <BaseInput
             label="Confirm password"
-            v-model="$v.userForm.confirmedPassword.$model"
             type="password"
             placeholder="******************"
-          />
-          <BaseInputError
-            v-if="
-              $v.userForm.confirmedPassword.$dirty &&
-                !$v.userForm.confirmedPassword.sameAsPassword
-            "
-            message="Passwords must be the same"
+            v-model="$v.userForm.confirmedPassword.$model"
+            :errorClass="$v.userForm.confirmedPassword.$error"
+            :errorContent="errorInputMessages.notTheSame"
           />
         </div>
         <div class="flex flex-col items-center justify-center">
@@ -76,20 +59,22 @@
 <script>
 import { mapActions } from 'vuex'
 import { required, email, minLength, sameAs } from 'vuelidate/lib/validators'
-import { isStrongPassword } from '@/helpers/vuelidateHelpers.js'
+import {
+  isStrongPassword,
+  errorInputMessages
+} from '@/helpers/vuelidateHelpers.js'
 export default {
   name: 'Register',
-  data() {
-    return {
-      userForm: {
-        username: '',
-        email: '',
-        password: '',
-        confirmedPassword: ''
-      },
-      alert: ''
-    }
-  },
+  data: () => ({
+    userForm: {
+      username: '',
+      email: '',
+      password: '',
+      confirmedPassword: ''
+    },
+    alert: false,
+    errorInputMessages
+  }),
   validations: {
     userForm: {
       email: { required, email },
@@ -109,12 +94,11 @@ export default {
       registerUser: 'user/registerUser'
     }),
     register() {
-      if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
         this.registerUser(this.userForm)
-        this.alert = ''
-      } else {
-        this.alert = 'The form is not completed'
-      }
+        this.alert = false
+      } else this.alert = true
     }
   }
 }

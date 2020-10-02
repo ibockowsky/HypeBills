@@ -2,40 +2,30 @@
   <div class="home mx-auto bg-gray-900 w-11/12 md:w-2/5 shadow-md rounded">
     <div class="w-full max-w-xs mx-auto">
       <div class="px-8 pt-6 pb-8 mb-4" @keyup.enter="login">
-        <BaseInputError v-if="alert.length" :message="alert" />
+        <div class="h-6 text-red-500 text-xs">
+          <span v-if="alert">{{ errorInputMessages.formError }}</span>
+        </div>
         <div class="mb-4">
           <BaseInput
             label="E-mail"
-            v-model="$v.userForm.email.$model"
             type="text"
             placeholder="example@example.com"
+            v-model="$v.userForm.email.$model"
             :errorClass="$v.userForm.email.$error"
+            :errorContent="errorInputMessages.notEmail"
             @blur="$v.userForm.email.$touch()"
-          />
-          <BaseInputError
-            v-if="$v.userForm.email.$error"
-            message="Please enter a valid email."
           />
         </div>
         <div class="mb-6">
           <BaseInput
             label="Password"
-            v-model="$v.userForm.password.$model"
             type="password"
             placeholder="******************"
+            v-model="$v.userForm.password.$model"
             :errorClass="$v.userForm.password.$error"
+            :errorContent="errorInputMessages.lowPassword"
             @blur="$v.userForm.password.$touch()"
           />
-          <template v-if="$v.userForm.password.$error">
-            <BaseInputError
-              v-if="!$v.userForm.password.required"
-              message="Please enter a valid password."
-            />
-            <BaseInputError
-              v-if="!$v.userForm.password.strongPassword"
-              message="It must contain 8 chars, letters, numbers and special chars."
-            />
-          </template>
         </div>
         <div class="flex flex-col items-center justify-center">
           <BaseButton @click.prevent="login">Login!</BaseButton>
@@ -50,32 +40,28 @@
 
 <script>
 import { mapActions } from 'vuex'
-import { required, email, strongPassword } from 'vuelidate/lib/validators'
+import { required, email } from 'vuelidate/lib/validators'
+import {
+  isStrongPassword,
+  errorInputMessages
+} from '@/helpers/vuelidateHelpers.js'
 
 export default {
   name: 'Login',
-  data() {
-    return {
-      userForm: {
-        email: '',
-        password: ''
-      },
-      alert: ''
-    }
-  },
+  data: () => ({
+    userForm: {
+      email: '',
+      password: ''
+    },
+    alert: false,
+    errorInputMessages
+  }),
   validations: {
     userForm: {
       email: { required, email },
       password: {
         required,
-        strongPassword(password) {
-          return (
-            /[a-z]/.test(password) && //checks for a-z
-            /[0-9]/.test(password) && //checks for 0-9
-            /\W|_/.test(password) && //checks for special char
-            password.length >= 8
-          )
-        }
+        isStrongPassword
       }
     }
   },
@@ -84,12 +70,11 @@ export default {
       loginUser: 'user/loginUser'
     }),
     login() {
-      if (!this.$v.userForm.$anyError && this.$v.userForm.$anyDirty) {
+      this.$v.$touch()
+      if (!this.$v.$invalid) {
         this.loginUser(this.userForm)
-        this.alert = ''
-      } else {
-        this.alert = 'The form is not completed'
-      }
+        this.alert = false
+      } else this.alert = true
     }
   }
 }

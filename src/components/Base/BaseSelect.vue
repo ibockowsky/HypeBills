@@ -22,7 +22,7 @@
       >
     </select> -->
     <div
-      class="shadow appearance-none border border-gray-800 rounded capitalize w-full py-2 px-3 text-center text-gray-500 bg-gray-700 leading-tight focus:outline-none select-none"
+      class="shadow appearance-none border border-gray-700 rounded capitalize w-full py-2 px-3 text-center text-gray-500 bg-gray-700 leading-tight focus:outline-none select-none"
       :tabindex="tabindex"
       @click.prevent="open = !open"
       @blur="open = false"
@@ -31,7 +31,7 @@
         {{ selected }}
       </div>
       <div
-        class="absolute bg-gray-800 my-2 border border-gray-800 rounded overflow-hidden z-10 right-0 left-0"
+        class="absolute bg-gray-800 my-2 border border-gray-700 rounded overflow-hidden z-10 right-0 left-0"
         :class="{ hidden: !open }"
       >
         <div

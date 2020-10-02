@@ -19,14 +19,15 @@
           /></span>
         </div>
         <div class="mt-2 h-96 md:h-112 overflow-y-auto">
-          <form class="w-full max-w-lg">
+          <form class="w-full max-w-lg" @keyup.enter="addDeal(dealForm)">
             <div class="flex flex-wrap md:mb-3">
               <div class="w-full px-3 mb-3">
                 <BaseAutocompleteInput
                   label="Title"
-                  v-model="$v.dealForm.title.$model"
                   type="text"
+                  v-model="$v.dealForm.title.$model"
                   :errorClass="$v.dealForm.title.$error"
+                  :errorContent="errorInputMessages.empty"
                   @blur="$v.dealForm.title.$touch()"
                 />
               </div>
@@ -35,9 +36,8 @@
               <div class="w-full md:w-3/4 px-3 mb-3">
                 <BaseInput
                   label="Size"
-                  v-model="$v.dealForm.size.$model"
                   type="text"
-                  :errorClass="$v.dealForm.size.$error"
+                  v-model="$v.dealForm.size.$model"
                   @blur="$v.dealForm.size.$touch()"
                 />
               </div>
@@ -46,7 +46,6 @@
                   label="Status"
                   v-model="$v.dealForm.status.$model"
                   :options="globals.dealStatuses"
-                  :errorClass="$v.dealForm.status.$error"
                   @blur="$v.dealForm.status.$touch()"
                 />
               </div>
@@ -55,18 +54,20 @@
               <div class="w-full md:w-5/12 px-3 mb-3">
                 <BaseInput
                   label="Retail"
-                  v-model="$v.dealForm.retail.$model"
                   type="text"
+                  v-model="$v.dealForm.retail.$model"
                   :errorClass="$v.dealForm.retail.$error"
+                  :errorContent="errorInputMessages.notNumber"
                   @blur="$v.dealForm.retail.$touch()"
                 />
               </div>
               <div class="w-full md:w-5/12 px-3 mb-3">
                 <BaseInput
                   label="Payout"
-                  v-model="$v.dealForm.payout.$model"
                   type="text"
+                  v-model="$v.dealForm.payout.$model"
                   :errorClass="$v.dealForm.payout.$error"
+                  :errorContent="errorInputMessages.notNumber"
                   @blur="$v.dealForm.payout.$touch()"
                 />
               </div>
@@ -75,28 +76,15 @@
                   label="Currency"
                   v-model="$v.dealForm.currency.$model"
                   :options="globals.dealCurrencies"
-                  :errorClass="$v.dealForm.currency.$error"
                   @blur="$v.dealForm.currency.$touch()"
                 />
               </div>
             </div>
             <div class="flex flex-wrap md:mb-3">
               <div class="w-full md:w-4/12 px-3 mb-3">
-                <label class="block text-white text-sm font-bold mb-2">
-                  Date
-                </label>
-                <vc-date-picker
-                  v-model="dealForm.date"
-                  :popover="{
-                    placement: 'top',
-                    visibility: 'click'
-                  }"
-                  :input-props="{
-                    class:
-                      'shadow appearance-none border border-gray-800 rounded w-full py-2 px-3 text-gray-500 bg-gray-700 leading-tight focus:outline-none'
-                  }"
-                  color="purple"
-                  is-dark
+                <BaseDatePicker
+                  label="Date"
+                  v-model="$v.dealForm.date.$model"
                 />
               </div>
               <div class="w-full md:w-2/12 px-3 mb-3">
@@ -104,15 +92,15 @@
                   label="Qty."
                   v-model.number="$v.qty.$model"
                   :errorClass="$v.qty.$error"
+                  :errorContent="errorInputMessages.notInteger"
                   @blur="$v.qty.$touch()"
                 />
               </div>
               <div class="w-full md:w-6/12 px-3 mb-3">
                 <BaseInput
                   label="Where"
-                  v-model="$v.dealForm.where.$model"
                   type="text"
-                  :errorClass="$v.dealForm.where.$error"
+                  v-model="$v.dealForm.where.$model"
                   @blur="$v.dealForm.where.$touch()"
                 />
               </div>
@@ -152,7 +140,11 @@
 import { mapGetters } from 'vuex'
 import { required } from 'vuelidate/lib/validators'
 import { parseToAmount } from '@/helpers/calcHelpers.js'
-import { isMoneyType } from '@/helpers/vuelidateHelpers.js'
+import {
+  dealFormValidate,
+  isInteger,
+  errorInputMessages
+} from '@/helpers/vuelidateHelpers.js'
 import * as globals from '@/helpers/globalConsts.js'
 
 export default {
@@ -174,19 +166,14 @@ export default {
       status: ''
     },
     qty: 1,
-    globals
+    globals,
+    errorInputMessages
   }),
   validations: {
     dealForm: {
-      title: { required },
-      size: {},
-      retail: { required, isMoneyType },
-      payout: { isMoneyType },
-      currency: { required },
-      where: {},
-      status: { required }
+      ...dealFormValidate
     },
-    qty: { required }
+    qty: { required, isInteger }
   },
   methods: {
     toggleAddModal() {
@@ -195,7 +182,6 @@ export default {
     addDeal(deal) {
       const { retail, payout } = deal
 
-      console.log(retail, payout)
       const payload = {
         ...deal,
         uid: this.uid
@@ -205,8 +191,8 @@ export default {
         if (this.qty > 1) {
           for (let i = 0; i < this.qty; i++) {
             this.$emit('add-deal', payload)
-            return
           }
+          return
         }
         this.$emit('add-deal', payload)
       }

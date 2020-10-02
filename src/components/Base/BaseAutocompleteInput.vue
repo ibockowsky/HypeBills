@@ -4,7 +4,7 @@
       {{ label }}
     </label>
     <input
-      class="shadow appearance-none border border-gray-800 rounded w-full py-2 px-3 text-gray-500 bg-gray-700 leading-tight focus:outline-none"
+      class="shadow appearance-none border border-gray-700 rounded w-full py-2 px-3 text-gray-500 bg-gray-700 leading-tight focus:outline-none"
       :value="value"
       :class="{
         'border-red-500': errorClass
@@ -13,9 +13,12 @@
       v-bind="$attrs"
       v-on="listeners"
     />
+    <div class="h-1 text-red-500 text-xs">
+      <span v-if="errorClass">{{ errorContent }}</span>
+    </div>
     <div class="relative -mt-1" v-if="open">
       <div
-        class="absolute bg-gray-800 my-2 border border-gray-800 rounded max-h-64 overflow-auto z-10 right-0 left-0 over"
+        class="absolute bg-gray-800 my-2 border border-gray-750 rounded max-h-64 overflow-auto z-10 right-0 left-0 over shadow"
       >
         <div
           v-for="(item, $index) in results"
@@ -57,15 +60,23 @@
 </template>
 
 <script>
-import { formFieldMixin } from '@/mixins/formFieldMixin'
 import axios from 'axios'
-
-const API_URL =
-  'https://xw7sbct9v6-dsn.algolia.net/1/indexes/products/query?x-algolia-agent=Algolia%20for%20vanilla%20JavaScript%203.32.1&x-algolia-application-id=XW7SBCT9V6&x-algolia-api-key=6bfb5abee4dcd8cea8f0ca1ca085c2b3'
+import { stockxAPI } from '@/helpers/globalConsts.js'
 
 export default {
   name: 'BaseAutocompleteInput',
-  mixins: [formFieldMixin],
+  inheritAttrs: false,
+  props: {
+    label: {
+      type: String,
+      default: ''
+    },
+    errorClass: {
+      type: Boolean
+    },
+    errorContent: { type: String },
+    value: [String, Number]
+  },
   computed: {
     listeners() {
       return {
@@ -77,9 +88,12 @@ export default {
   data: () => ({
     results: [],
     open: false,
-    api_url: API_URL
+    api_url: stockxAPI
   }),
   methods: {
+    updateValue(event) {
+      this.$emit('input', event.target.value)
+    },
     findItems(input) {
       if (input.length < 2 || this.results.some(item => item.name === input)) {
         this.results = []
