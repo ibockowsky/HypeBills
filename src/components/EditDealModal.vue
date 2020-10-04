@@ -102,24 +102,21 @@
           class="flex flex-col md:flex-row-reverse text-right mt-6 md:-mt-10"
         >
           <span class="shadow-sm my-1 md:my-0 md:mx-1">
-            <button
-              type="button"
-              class="w-full md:w-auto text-white bg-yellow-600 hover:bg-yellow-900 py-2 px-5 rounded"
-              :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
-              :disabled="$v.dealForm.$anyError"
+            <BaseFormButton
+              class="bg-yellow-600 hover:bg-yellow-900"
+              :isAnyError="$v.dealForm.$anyError"
               @click="edit"
             >
               Edit
-            </button>
+            </BaseFormButton>
           </span>
           <span class="shadow-sm my-1 md:my-0 md:mx-1">
-            <button
-              type="button"
-              class="w-full md:w-auto text-white bg-gray-700 hover:bg-gray-800 py-2 px-5 rounded"
+            <BaseFormButton
+              class="bg-gray-700 hover:bg-gray-800"
               @click="toggleEditModal"
             >
               Cancel
-            </button>
+            </BaseFormButton>
           </span>
         </div>
       </div>
@@ -149,15 +146,18 @@ export default {
     ...mapGetters({
       getDeal: 'deals/getDeal'
     }),
-    deal() {
-      return this.getDeal(this.dealID)
+    dealForm() {
+      const deal = this.getDeal(this.dealID)
+      const dealDate =
+        deal.date instanceof Date ? deal.date : deal.date.toDate()
+      return { ...deal, date: dealDate }
+    },
+    globals() {
+      return globals
+    },
+    errorInputMessages() {
+      return errorInputMessages
     }
-  },
-  data: () => ({ dealForm: null, globals, errorInputMessages }),
-  created() {
-    const dealDate =
-      this.deal.date instanceof Date ? this.deal.date : this.deal.date.toDate()
-    this.dealForm = { ...this.deal, date: dealDate }
   },
   validations: {
     dealForm: {
@@ -179,7 +179,7 @@ export default {
       this.$v.$touch()
       if (!this.$v.$invalid) {
         this.updateDeal(payload).then(() => {
-          this.$router.go(-1)
+          this.toggleEditModal()
         })
       }
     }

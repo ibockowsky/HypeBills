@@ -52,6 +52,34 @@ const actions = {
         )
       })
   },
+  addDeals: ({ commit, dispatch }, deals) => {
+    let batch = fb.db.batch()
+    let dealsIds = []
+    deals.forEach(deal => {
+      const docRef = fb.db.collection('deals').doc()
+      batch.set(docRef, deal)
+      dealsIds.push(docRef.id)
+    })
+    batch
+      .commit()
+      .then(() => {
+        deals.forEach((deal, $index) => {
+          commit(ADD_DEAL, { ...deal, id: dealsIds[$index] })
+        })
+        dispatch(
+          'addAlert',
+          { content: 'Added many!', type: 'success' },
+          { root: true }
+        )
+      })
+      .catch(err => {
+        dispatch(
+          'addAlert',
+          { title: 'Error', content: err.message, type: 'error' },
+          { root: true }
+        )
+      })
+  },
   getDeals: ({ commit, dispatch, rootGetters }) => {
     let tempArray = []
     const uid = rootGetters['user/getUserId']

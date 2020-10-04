@@ -4,6 +4,7 @@
       v-if="showAddingModal"
       @toggle-modal="showAddingModal = !showAddingModal"
       @add-deal="add"
+      @add-deals="addMany"
     />
     <router-view />
     <div
@@ -32,6 +33,31 @@ import { mapState, mapActions } from 'vuex'
 import TableDeals from '@/components/TableDeals.vue'
 import AddDealModal from '@/components/AddDealModal.vue'
 
+const preparePayload = payload => {
+  const {
+    title,
+    size,
+    retail,
+    payout,
+    currency,
+    date,
+    where,
+    status,
+    uid
+  } = payload
+  return {
+    title,
+    size,
+    retail,
+    payout,
+    currency,
+    date,
+    where,
+    status,
+    uid
+  }
+}
+
 export default {
   name: 'Deals',
   components: { TableDeals, AddDealModal },
@@ -49,32 +75,18 @@ export default {
 
   methods: {
     ...mapActions({
-      addDeal: 'deals/addDeal'
+      addDeal: 'deals/addDeal',
+      addDeals: 'deals/addDeals'
     }),
     add(items) {
-      const {
-        title,
-        size,
-        retail,
-        payout,
-        currency,
-        date,
-        where,
-        status,
-        uid
-      } = items
-      const payload = {
-        title,
-        size,
-        retail,
-        payout,
-        currency,
-        date,
-        where,
-        status,
-        uid
-      }
+      const payload = preparePayload(items)
       this.addDeal(payload)
+      this.showAddingModal = false
+    },
+    addMany({ deal, qty }) {
+      const payload = preparePayload(deal)
+      const payload_array = Array(qty).fill(payload)
+      this.addDeals(payload_array)
       this.showAddingModal = false
     },
     onChangePage(pageOfDeals) {

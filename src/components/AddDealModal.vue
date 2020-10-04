@@ -111,24 +111,21 @@
           class="flex flex-col-reverse md:flex-row-reverse text-right mt-6 md:-mt-10"
         >
           <span class="shadow-sm my-1 md:my-0 md:mx-1">
-            <button
-              type="button"
-              class="w-full md:w-auto text-white bg-green-600 hover:bg-green-800 py-2 px-5 rounded"
-              :class="{ 'cursor-not-allowed': $v.dealForm.$anyError }"
-              :disabled="$v.dealForm.$anyError"
+            <BaseFormButton
+              class="bg-green-600 hover:bg-green-800"
+              :isAnyError="$v.dealForm.$anyError"
               @click="addDeal(dealForm)"
             >
               Add
-            </button>
+            </BaseFormButton>
           </span>
           <span class="shadow-sm my-1 md:my-0 md:mx-1">
-            <button
-              type="button"
-              class="w-full md:w-auto text-white bg-gray-700 hover:bg-gray-800 py-2 px-5 rounded"
+            <BaseFormButton
+              class="bg-gray-700 hover:bg-gray-800"
               @click="toggleAddModal"
             >
               Cancel
-            </button>
+            </BaseFormButton>
           </span>
         </div>
       </div>
@@ -152,7 +149,13 @@ export default {
   computed: {
     ...mapGetters({
       uid: 'user/getUserId'
-    })
+    }),
+    globals() {
+      return globals
+    },
+    errorInputMessages() {
+      return errorInputMessages
+    }
   },
   data: () => ({
     dealForm: {
@@ -165,9 +168,7 @@ export default {
       where: '',
       status: ''
     },
-    qty: 1,
-    globals,
-    errorInputMessages
+    qty: 1
   }),
   validations: {
     dealForm: {
@@ -180,21 +181,15 @@ export default {
       this.$emit('toggle-modal')
     },
     addDeal(deal) {
-      const { retail, payout } = deal
-
       const payload = {
         ...deal,
         uid: this.uid
       }
       this.$v.$touch()
       if (!this.$v.$invalid) {
-        if (this.qty > 1) {
-          for (let i = 0; i < this.qty; i++) {
-            this.$emit('add-deal', payload)
-          }
-          return
-        }
-        this.$emit('add-deal', payload)
+        if (this.qty > 1)
+          this.$emit('add-deals', { deal: payload, qty: this.qty })
+        else this.$emit('add-deal', payload)
       }
     }
   },

@@ -48,7 +48,7 @@
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.date }"
       >
-        {{ formatedDate }}
+        {{ formattedDate }}
       </span>
     </td>
     <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
@@ -145,7 +145,7 @@ export default {
 
       return rv
     },
-    formatedDate() {
+    formattedDate() {
       const { date } = this.rowData
 
       const rv =

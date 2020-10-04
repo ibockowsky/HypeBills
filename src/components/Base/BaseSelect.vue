@@ -3,24 +3,6 @@
     <label v-if="label" class="block text-white text-sm font-bold mb-2">
       {{ label }}
     </label>
-    <!-- <select
-      class="shadow appearance-none border border-gray-800 rounded w-full py-2 px-3 text-gray-500 bg-gray-700 leading-tight focus:outline-none"
-      :class="{
-        'border-red-500': errorClass
-      }"
-      :value="value"
-      @change="updateValue"
-      v-bind="$attrs"
-      v-on="$listeners"
-    >
-      <option
-        v-for="(option, $index) in options"
-        :value="option"
-        :key="$index"
-        :selected="option === value"
-        >{{ option }}</option
-      >
-    </select> -->
     <div
       class="shadow appearance-none border border-gray-700 rounded capitalize w-full py-2 px-3 text-center text-gray-500 bg-gray-700 leading-tight focus:outline-none select-none"
       :tabindex="tabindex"
@@ -35,7 +17,7 @@
         :class="{ hidden: !open }"
       >
         <div
-          class="py-1 px-4 my-1 rounded hover:bg-gray-700"
+          class="py-1 px-4 my-1 rounded hover:bg-gray-750"
           v-for="(option, $index) of options"
           :key="$index"
           @click.prevent="changeSelect(option)"
