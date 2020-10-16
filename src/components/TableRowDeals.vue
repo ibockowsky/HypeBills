@@ -1,9 +1,9 @@
 <template>
   <tr>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-1/20">
       <input type="checkbox" @change="$emit('selected-deal')" />
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-3/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.title }"
@@ -11,7 +11,7 @@
         {{ rowData.title ? rowData.title : '' }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.size }"
@@ -19,7 +19,7 @@
         {{ rowData.size ? rowData.size : '' }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.retail }"
@@ -27,7 +27,7 @@
         {{ retail }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.payout }"
@@ -35,7 +35,7 @@
         {{ payout }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.currency }"
@@ -43,7 +43,7 @@
         {{ rowData.currency ? `${rowData.currency}` : '' }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.date }"
@@ -51,7 +51,7 @@
         {{ formattedDate }}
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="text-gray-200 whitespace-no-wrap"
         :class="{ 'text-gray-800': !rowData.where }"
@@ -59,9 +59,7 @@
         {{ rowData.where ? rowData.where : '' }}
       </span>
     </td>
-    <td
-      class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm text-center"
-    >
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <span
         class="relative inline-block px-3 py-1 text-gray-900 font-semibold capitalize leading-tight select-none"
       >
@@ -79,7 +77,7 @@
         <span class="relative">{{ rowData.status }}</span>
       </span>
     </td>
-    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm">
+    <td class="px-5 py-5 border-b border-gray-900 bg-gray-700 text-sm w-2/20">
       <div class="flex space-x-1">
         <button
           class="bg-yellow-600 hover:bg-yellow-800 text-white py-1 px-2 rounded-full focus:outline-none"
@@ -129,9 +127,7 @@ export default {
         currency
       }).toFormat('0.00')
 
-      const rv = `${moneyTypeRetail} ${this.currencySign(currency)}`
-
-      return rv
+      return `${moneyTypeRetail} ${this.currencySign(currency)}`
     },
     payout() {
       const { payout, currency } = this.rowData
@@ -141,19 +137,14 @@ export default {
         currency
       }).toFormat('0.00')
 
-      const rv = `${moneyTypePayout} ${this.currencySign(currency)}`
-
-      return rv
+      return `${moneyTypePayout} ${this.currencySign(currency)}`
     },
     formattedDate() {
       const { date } = this.rowData
 
-      const rv =
-        date instanceof Date
-          ? date.toLocaleDateString()
-          : date.toDate().toLocaleDateString()
-
-      return rv
+      return date instanceof Date
+        ? date.toLocaleDateString()
+        : date.toDate().toLocaleDateString()
     }
   }
 }

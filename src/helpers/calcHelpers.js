@@ -2,8 +2,8 @@ import Dinero from 'dinero.js'
 
 export const calcSumByCondition = ({
   array,
-  to_sum,
-  to_condition,
+  toSum,
+  toCondition,
   condition,
   currency,
   currencies
@@ -12,17 +12,17 @@ export const calcSumByCondition = ({
 
   let sum = 0
 
-  if (condition !== undefined && to_condition !== undefined) {
+  if (condition !== undefined && toCondition !== undefined) {
     sum = array.reduce((prev, cur) => {
-      if (cur[to_condition] === condition) {
+      if (cur[toCondition] === condition) {
         if (cur.currency !== currency) {
-          const amountValue = parseToAmount(cur[to_sum])
+          const amountValue = parseToAmount(cur[toSum])
           const exchanged = Dinero({ amount: amountValue }).divide(
             currencies[cur.currency]
           )
           return prev.add(exchanged)
         } else {
-          const amountValue = parseToAmount(cur[to_sum])
+          const amountValue = parseToAmount(cur[toSum])
           return prev.add(Dinero({ amount: amountValue }))
         }
       } else return prev.add(Dinero({ amount: 0 }))
@@ -30,13 +30,13 @@ export const calcSumByCondition = ({
   } else {
     sum = array.reduce((prev, cur) => {
       if (cur.currency !== currency) {
-        const amountValue = parseToAmount(cur[to_sum])
+        const amountValue = parseToAmount(cur[toSum])
         const exchanged = Dinero({ amount: amountValue }).divide(
           currencies[cur.currency]
         )
         return prev.add(exchanged)
       } else {
-        const amountValue = parseToAmount(cur[to_sum])
+        const amountValue = parseToAmount(cur[toSum])
         return prev.add(Dinero({ amount: amountValue }))
       }
     }, Dinero({ amount: 0 }))

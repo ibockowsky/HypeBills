@@ -54,17 +54,17 @@ const actions = {
   },
   addDeals: ({ commit, dispatch }, deals) => {
     let batch = fb.db.batch()
-    let dealsIds = []
+    let preparedDeals = []
     deals.forEach(deal => {
       const docRef = fb.db.collection('deals').doc()
       batch.set(docRef, deal)
-      dealsIds.push(docRef.id)
+      preparedDeals.push({ ...deal, id: docRef.id })
     })
     batch
       .commit()
       .then(() => {
-        deals.forEach((deal, $index) => {
-          commit(ADD_DEAL, { ...deal, id: dealsIds[$index] })
+        preparedDeals.forEach(deal => {
+          commit(ADD_DEAL, deal)
         })
         dispatch(
           'addAlert',
@@ -155,7 +155,7 @@ const getters = {
   getTotalOutgoings: (state, getters, rootState, rootGetters) => {
     const totalOutgoings = calcSumByCondition({
       array: state.deals,
-      to_sum: 'retail',
+      toSum: 'retail',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
@@ -165,8 +165,8 @@ const getters = {
   getTotalIncomings: (state, getters, rootState, rootGetters) => {
     const totalIncomings = calcSumByCondition({
       array: state.deals,
-      to_sum: 'payout',
-      to_condition: 'status',
+      toSum: 'payout',
+      toCondition: 'status',
       condition: 'sold',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
@@ -177,16 +177,16 @@ const getters = {
   getCurrentHold: (state, getters, rootState, rootGetters) => {
     const currentHold = calcSumByCondition({
       array: state.deals,
-      to_sum: 'retail',
-      to_condition: 'status',
+      toSum: 'retail',
+      toCondition: 'status',
       condition: 'on hold',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
     const currentTransit = calcSumByCondition({
       array: state.deals,
-      to_sum: 'retail',
-      to_condition: 'status',
+      toSum: 'retail',
+      toCondition: 'status',
       condition: 'in transit',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
@@ -197,8 +197,8 @@ const getters = {
   getProbableIncome: (state, getters, rootState, rootGetters) => {
     const probableIncome = calcSumByCondition({
       array: state.deals,
-      to_sum: 'payout',
-      to_condition: 'status',
+      toSum: 'payout',
+      toCondition: 'status',
       condition: 'on hold',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
@@ -209,16 +209,16 @@ const getters = {
   getTotalEarnings: (state, getters, rootState, rootGetters) => {
     const totalSoldPayout = calcSumByCondition({
       array: state.deals,
-      to_sum: 'payout',
-      to_condition: 'status',
+      toSum: 'payout',
+      toCondition: 'status',
       condition: 'sold',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies
     })
     const totalSoldRetail = calcSumByCondition({
       array: state.deals,
-      to_sum: 'retail',
-      to_condition: 'status',
+      toSum: 'retail',
+      toCondition: 'status',
       condition: 'sold',
       currency: rootGetters['user/getBaseCurrency'],
       currencies: rootState.user.currencies

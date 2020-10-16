@@ -4,7 +4,7 @@
       v-if="confirmDialog.open"
       @callback="handleCallback"
     ></BaseConfirmDialog>
-    <div class="inline-block min-w-full shadow rounded-lg">
+    <div class="inline-block min-w-full shadow">
       <table class="min-w-full leading-normal">
         <thead>
           <tr>

@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="relative w-screen">
     <Navbar />
     <div class="mx-auto w-full">
       <Summary v-if="isLoggedIn" />

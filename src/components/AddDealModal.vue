@@ -194,10 +194,14 @@ export default {
     }
   },
   mounted() {
-    document.body.classList.add('disable-scroll')
+    // this.$fixBody.fixBody()
+    // document.body.classList.add('disable-scroll')
+    document.body.classList.add('not-scrollable')
   },
   destroyed() {
-    document.body.classList.remove('disable-scroll')
+    // this.$fixBody.unfixBody()
+    // document.body.classList.remove('disable-scroll')
+    document.body.classList.remove('not-scrollable')
   }
 }
 </script>

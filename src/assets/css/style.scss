@@ -1,11 +1,14 @@
-body {
+html {
   @apply min-h-screen;
   background-color: #9921e8;
   background-image: linear-gradient(315deg, #9921e8 0%, #5f72be 74%);
+  overflow-x: hidden;
 }
 
-.disable-scroll {
+.not-scrollable {
   overflow: hidden;
+  position: fixed;
+  touch-action: none;
 }
 
 .btn-grad {
