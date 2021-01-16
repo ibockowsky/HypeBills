@@ -52,6 +52,5 @@ VUE_APP_measurementId=
 
 ## Todo
 ```
-~~Dinero.js for money types~~
 Animations
 ```
