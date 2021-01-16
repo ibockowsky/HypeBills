@@ -1,5 +1,5 @@
 # hypebills (WIP)
-HypeBills is a web application for managing your deals, bills and much more!.
+HypeBills is a web application for managing your deals, bills and much more!
 
 ## Installation
 ```bash
@@ -52,6 +52,6 @@ VUE_APP_measurementId=
 
 ## Todo
 ```
-Dinero.js for money types
+~~Dinero.js for money types~~
 Animations
 ```
